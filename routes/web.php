@@ -24,10 +24,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/logout', 'LoginController@logout')->name('logout');
 
     // User
-    Route::group(['prefix' => 'user'], function() {
-        Route::get('/', 'UserController@index');
-        Route::get('/create', 'UserController@create');
-    });
+    // Route::group(['prefix' => 'user'], function() {
+    //     // Route::get('/', 'UserController@index');
+    //     // Route::get('/create', 'UserController@store');
+    // });
+    Route::resource('user', 'UserController');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'login'], function() {

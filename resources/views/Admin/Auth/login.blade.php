@@ -13,7 +13,7 @@
 </head>
 <body>
     
-    <div class="loginBox">        
+    <div class="loginBox">
         <div class="loginHead">
             <img src="{{ asset('img/logo.png') }}" alt="NTQ Solution Admin Control Panel" title="NTQ Solution Admin Control Panel"/>
         </div>
@@ -38,6 +38,11 @@
                 <button type="submit" class="btn btn-block" name="btnLogin">Sign in</button>
             </div> 
         </form>
+        @if (session('message'))
+            <div class="alert alert-error">
+                {{ session('message') }}
+            </div>
+        @endif
     </div>
 </body>
 </html>

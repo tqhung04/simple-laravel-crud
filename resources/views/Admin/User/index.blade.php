@@ -3,7 +3,7 @@
 @section('title', 'User')
 
 @section('breadline')
-    <li><a href="{{ url('user') }}">List Users</a></li>
+    <li><a href="{{ url('admin/user') }}">List Users</a></li>
 @stop
 
 @section('content')
@@ -38,16 +38,19 @@
                         <td><input type="checkbox" name="checkbox"/></td>
                         <td>{{ $indexKey }}</td>
                         <td>{{ $user->username }}</td>
-                        <td><span class="text-success">Activated</span></td>
-                        <td>15:00 05/10/2014</td>
-                        <td>15:00 05/10/2014</td>
-                        <td><a href="edit-user.html" class="btn btn-info">Edit</a></td>
+                        @if( $user->status == 0 )
+                            <td><span class="text-success">Activated</span></td>
+                        @else
+                            <td><span class="text-error">Not actived</span></td>
+                        @endif
+                        <td>{{ $user->created_at }}</td>
+                        <td>{{ $user->updated_at }}</td>
+                        <td><a href="{{ url('admin/user/' . $user->id . '/edit') }}" class="btn btn-info">Edit</a></td>
                     </tr>
                     @endforeach
 
                     </tbody>
                 </table>
-
                 <div class="bulk-action">
                     <a href="#" class="btn btn-success">Activate</a>
                     <a href="#" class="btn btn-danger">Delete</a>

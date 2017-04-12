@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
 
 class LoginController extends Controller
 {
@@ -23,13 +24,20 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/admin/user';
-    protected $redirectAfterLogout = '/admin/login';
+    protected function redirectTo()
+    {
+        return '/admin/user';
+    }
+
+    protected function redirectAfterLogout()
+    {
+        return 'login';
+    }
+
+    protected function redirectAfterLoginFailed()
+    {
+        return 'login';
+    }
 
     /**
      * Create a new controller instance.
@@ -43,26 +51,27 @@ class LoginController extends Controller
 
     public function index () {
         return view("Admin.Auth.login");
-
     }
-    public function authenticate(Request $request)
-    {
-        // $dataOfInput = [
-        //     'username' = $request->username,
-        //     'password' = $request->password,
-        // ];
-        $username = $request->username;
-        $password = $request->password;
-        
-        if (Auth::attempt(['username' => $username, 'password' => $password])) {
-            return redirect()->intended('admin/user');
+
+    public function authenticate(Request $request) {
+        $remember = (Input::has('cbRemember')) ? true : false;
+
+        $dataOfInput = Auth::attempt(
+            [
+                'username'  => strtolower(Input::get('username')),
+                'password'  => Input::get('password')
+            ], $remember
+        );
+
+        if ($dataOfInput) {
+            return redirect()->intended($this->redirectTo());
         } else {
-            return redirect()->intended('back');
+            return redirect()->route($this->redirectAfterLoginFailed())->with('message', 'Your username/password combination was incorrect.');
         }
     }
 
     public function logout () {
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route($this->redirectAfterLogout());
     }
 }
