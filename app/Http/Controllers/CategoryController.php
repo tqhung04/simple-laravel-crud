@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Collective\Html\HtmlFacade;
+use Validator;
 
-class DemoController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +18,8 @@ class DemoController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::paginate(10);
+        return view('Admin.Category.index')->with('categories', $categories);
     }
 
     /**

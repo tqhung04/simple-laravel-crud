@@ -11,8 +11,7 @@ use Validator;
 use Hash;
 use DB; 
 
-class UserController extends Controller
-{
+class UserController extends Controller {
 
     public function index()
     {
@@ -42,11 +41,9 @@ class UserController extends Controller
             $image = Input::file('avatar');
             $filename  = $user->username . '.' . $image->getClientOriginalExtension();
             $path = public_path('upload/');
-            Input::file('avatar')->move($path, $filename); // uploading file to given path
+            Input::file('avatar')->move($path, $filename);
             $user->avatar = $filename;
         }
-
-        // User::create($request->all());
 
         $user->save();
 
@@ -88,8 +85,7 @@ class UserController extends Controller
 
     }
 
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
 

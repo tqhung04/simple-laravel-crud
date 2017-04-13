@@ -44,17 +44,17 @@
 
     <ul class="navigation">
         <li>
-            <a href="list-categories.html">
+            <a href="{{ url('admin/category') }}">
                 <span class="isw-grid"></span><span class="text">Categories</span>
             </a>
         </li>
         <li>
-            <a href="list-products.html">
+            <a href="{{ url('admin/product') }}">
                 <span class="isw-list"></span><span class="text">Products</span>
             </a>
         </li>
         <li>
-            <a href="list-users.html">
+            <a href="{{ url('admin/user') }}">
                 <span class="isw-user"></span><span class="text">Users</span>
             </a>
         </li>

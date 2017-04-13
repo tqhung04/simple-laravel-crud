@@ -13,7 +13,6 @@
 
 // Auth route
 Auth::routes();
-Route::get('/', 'UserController@index');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
@@ -24,13 +23,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/logout', 'LoginController@logout')->name('logout');
 
     // User
-    // Route::group(['prefix' => 'user'], function() {
-    //     // Route::get('/', 'UserController@index');
-    //     // Route::get('/create', 'UserController@store');
-    // });
     Route::get('user/search', 'UserController@search');
     Route::post('user/action', 'UserController@action');
     Route::resource('user', 'UserController');
+
+    // Product
+    Route::get('product/search', 'ProductController@search');
+    Route::resource('product', 'ProductController');
+    Route::post('product/action', 'ProductController@action');
+
+    // Category
+    Route::resource('category', 'CategoryController');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'login'], function() {
