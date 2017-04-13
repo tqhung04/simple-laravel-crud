@@ -10,7 +10,8 @@
 
     {{-- <link href="css/stylesheets.css" rel="stylesheet" type="text/css"/> --}}
     <link href="{{ asset('css/stylesheets.css') }}" rel="stylesheet" type="text/css"/>
-
+    <script type="text/javascript" src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 
 </head>
 <body>
@@ -70,10 +71,7 @@
     <div class="workplace">
         <div class="row-fluid">
             <div class="span12 search">
-                <form>
-                    <input type="text" class="span11" placeholder="Some text for search..." name="search"/>
-                    <button class="btn span1" type="submit">Search</button>
-                </form>
+                @yield('search')
             </div>
         </div>
 

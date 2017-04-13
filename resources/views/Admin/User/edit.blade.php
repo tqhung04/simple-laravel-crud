@@ -18,9 +18,7 @@
                     <div class="clear"></div>
                 </div>
                 <div class="block-fluid">
-                    {{-- {{ Form::model($user, array('route' => array('user.update', $user->id), 'method' => 'PUT')) }} --}}
                     {!! Form::open(['action' => ['UserController@update', $user->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
-                    {{-- {!! Form::open(['action' => 'UserController@update', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!} --}}
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row-form">
                             <div class="span3">Username:</div>
@@ -35,14 +33,11 @@
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
-                            <div class="span3">Password:</div>
-                            <div class="span9">{{ Form::password('password', null, array('placeholder'=>'some text value...')) }}</div>
-                            <div class="clear"></div>
-                        </div> 
-                        <div class="row-form">
                             <div class="span3">Upload Avatar:</div>
                             <div class="span9">
-                                <img src="{{ asset("upload/$user->avatar") }}" alt="{{ $user->avatar }}" width="50px" height="50px">
+                                @if($user->avatar)
+                                    <img src="{{ asset("upload/$user->avatar") }}" alt="{{ $user->avatar }}" width="50px" height="50px">
+                                @endif
                                 {{ Form::file('avatar', null) }}
                             </div>
                             <div class="clear"></div>

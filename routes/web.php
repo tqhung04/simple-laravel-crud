@@ -28,6 +28,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     //     // Route::get('/', 'UserController@index');
     //     // Route::get('/create', 'UserController@store');
     // });
+    Route::get('user/search', 'UserController@search');
+    Route::post('user/action', 'UserController@action');
     Route::resource('user', 'UserController');
 });
 
