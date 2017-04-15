@@ -12,6 +12,8 @@
 <h4>1. Clone project: https://github.com/tqhung04/simple-laravel-crud.git</h4>
 <h4>2. Import database (db_mvc.sql)</h4>
 <h4>3. Download composer: https://getcomposer.org/download/</h4>
-<h4>4. Download các packages mà project sử dụng: <b style="color: #f4645f; padding: 5px; background: bisque;">composer install</b></h4>
+<h4>4. Cd tới thư mục chứa project, download các packages mà project sử dụng: <b style="color: #f4645f; padding: 5px; background: bisque;">composer install</b></h4>
+<h4>5. Generate key: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan key:generate</b></h4>
+<h4>5. Clear cache: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan config:clear</b></h4>
 <h4>5. Khởi chạy serve: <b style="color: #f4645f; padding: 5px; background: bisque;">php artisan serve</b></h4>
 <h4>6. Kết nối tới : http://127.0.0.1:8000</h4>
