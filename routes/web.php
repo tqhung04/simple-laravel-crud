@@ -33,7 +33,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('product/action', 'ProductController@action');
 
     // Category
+    Route::get('category/search', 'CategoryController@search');
     Route::resource('category', 'CategoryController');
+    Route::post('category/action', 'CategoryController@action');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'login'], function() {

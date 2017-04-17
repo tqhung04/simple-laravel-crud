@@ -62,7 +62,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('Admin.Category.edit')->with('category', $category);
     }
 
     /**
@@ -74,7 +75,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|unique:categories,id',
+        ]);
+
+        $user = Category::find($id);
+        $user->name = Input::get('name');
+        $user->save();
+
+        return redirect()->action('CategoryController@index');
     }
 
     /**
