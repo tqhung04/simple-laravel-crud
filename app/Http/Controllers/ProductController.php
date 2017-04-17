@@ -27,7 +27,8 @@ class ProductController extends Controller
         $categories = Category::get()->where('status', '=', '0');
         $categoryList = [];
         foreach ($categories as $category) {
-            $categoryList[] = $category['name'];
+            $category = Category::where('name' , '=', $category['name'])->first();
+            $categoryList[$category['id']] = $category['name'];
         }
 
         return view('Admin.Product.create')
@@ -39,13 +40,13 @@ class ProductController extends Controller
         $this->validate($request, [
             'name' => 'required|unique:products',
             'price' => 'required|numeric',
-            'category' => 'required|exists:categories,id',
+            'category' => 'required',
         ]);
 
         $product = new Product;
         $product->name = Input::get('name');
         $product->price = Input::get('price');
-        $product->description = Input::get('password');
+        $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
 
