@@ -30,8 +30,7 @@
             </div>
             <div class="control-group" style="margin-bottom: 5px;">
                 <label class="checkbox">
-                    <input type="hidden" name="cbRemember" value="0" />
-                    <input type="checkbox" name="cbRemember" id="cbRemember" value="1"> Remember me
+                    <input type="checkbox" name="cbRemember" id="cbRemember"> Remember me
                 </label>
             </div>
             <div class="form-actions">
@@ -39,7 +38,7 @@
             </div> 
         </form>
         @if (session('message'))
-            <div class="alert alert-error">
+            <div class="alert alert-error" style="text-align: center">
                 {{ session('message') }}
             </div>
         @endif

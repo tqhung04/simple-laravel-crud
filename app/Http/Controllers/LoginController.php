@@ -63,10 +63,10 @@ class LoginController extends Controller
             ], $remember
         );
 
-        if ($dataOfInput) {
+        if ( $dataOfInput ) {
             return redirect()->intended($this->redirectTo());
         } else {
-            return redirect()->route($this->redirectAfterLoginFailed())->with('message', 'Your username/password combination was incorrect.');
+            return redirect()->route($this->redirectAfterLoginFailed())->with('message', 'User & password doesn\'t match.');
         }
     }
 

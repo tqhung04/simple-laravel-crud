@@ -27,16 +27,16 @@
     <div class="breadLine">
         <div class="arrow"></div>
         <div class="adminControl active">
-            Hi, Ta Quoc Vuong
+            Hello, {{ Auth::user()->username }}
         </div>
     </div>
 
     <div class="admin">
         <div class="image">
-            <img src="{{ asset('img/users/avatar.jpg') }}" class="img-polaroid"/>
+            <img src="{{ asset('upload/userImages/' . Auth::user()->avatar) }}" class="img-polaroid" width="50px" height="50px"/>
         </div>
         <ul class="control">
-            <li><span class="icon-cog"></span> <a href="edit-user.html">Update Profile</a></li>
+            <li><span class="icon-cog"></span> <a href="{{ url('admin/user/'. Auth::user()->id .'/edit') }}">Update Profile</a></li>
             {{-- <li><span class="icon-share-alt"></span> <a href="{{ action("LoginController@logout") }}">Logout</a></li> --}}
             <li><span class="icon-share-alt"></span> <a href="{{ route('logout') }}">Logout</a></li>
         </ul>

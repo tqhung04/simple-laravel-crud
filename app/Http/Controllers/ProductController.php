@@ -13,27 +13,18 @@ use DB;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::orderBy('id', 'desc')->paginate(10);
 
         return view('Admin.Product.index')
             ->with('products', $products);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $categories = Category::get();
+        $categories = Category::get()->where('status', '=', '0');
         $categoryList = [];
         foreach ($categories as $category) {
             $categoryList[] = $category['name'];
@@ -43,12 +34,6 @@ class ProductController extends Controller
             ->with('categoryList', $categoryList);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -77,28 +62,11 @@ class ProductController extends Controller
         return redirect()->action('UserController@index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $product = Product::find($id);
 
-        $categories = Category::get();
+        $categories = Category::get()->where('status', '=', '0');
         $categoryList[0] = DB::table('categories')->where('id', $product->categories_id)->value('name');
         foreach ($categories as $category) {
             $categoryList[] = $category['name'];
@@ -109,17 +77,10 @@ class ProductController extends Controller
             ->with('product', $product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|unique:products,id',
+            'name' => 'required|unique:products,name,' .$id,
             'price' => 'required|numeric',
             'category' => 'required',
         ]);
@@ -141,15 +102,9 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect()->action('UserController@index');
+        return redirect()->action('ProductController@index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
@@ -170,7 +125,6 @@ class ProductController extends Controller
             $product = Product::find($id);
             $product->status = $status;
             $product->save();
-            // print_r($product);
         }
 
         return redirect()->action('ProductController@index');

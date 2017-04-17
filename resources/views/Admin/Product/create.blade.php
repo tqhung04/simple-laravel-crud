@@ -3,7 +3,7 @@
 @section('title', 'Create Product')
 
 @section('breadline')
-<li><a href="{{ url('admin/user') }}">List Products</a> <span class="divider">></span></li>
+<li><a href="{{ url('admin/product') }}">List Products</a> <span class="divider">></span></li>
 <li class="active">Add</li>
 @stop
 

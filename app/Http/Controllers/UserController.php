@@ -15,7 +15,7 @@ class UserController extends Controller {
 
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::orderBy('id', 'desc')->paginate(10);
         return view('Admin.User.index')->with('users', $users);
     }
 
@@ -40,14 +40,14 @@ class UserController extends Controller {
         if ( Input::file('avatar') ) {
             $image = Input::file('avatar');
             $filename  = $user->username . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/');
+            $path = public_path('upload/userImages');
             Input::file('avatar')->move($path, $filename);
             $user->avatar = $filename;
         }
 
         $user->save();
 
-        return redirect()->back();
+        return redirect()->action('UserController@index');
     }
 
     public function show($id) {
@@ -62,8 +62,8 @@ class UserController extends Controller {
     public function update(Request $request, $id) {
 
         $this->validate($request, [
-            'username' => 'required|unique:users,id',
-            'email' => 'required|unique:users,id',
+            'username' => 'required|unique:users,username,'. $id,
+            'email' => 'required|unique:users,email,' . $id,
         ]);
 
         $user = User::find($id);
@@ -71,7 +71,7 @@ class UserController extends Controller {
         if ( Input::file('avatar') ) {
             $image = Input::file('avatar');
             $filename  = $user->username . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/');
+            $path = public_path('upload/userImages');
             Input::file('avatar')->move($path, $filename);
             $user->avatar = $filename;
         }

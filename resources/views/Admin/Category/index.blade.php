@@ -10,7 +10,7 @@
     {{ Form::open(array('url' => 'admin/category/search', 'method' => 'get')) }}
 
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        {!! Form::text('search', null, array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
+        {!! Form::text('search', null, array('required', 'class'=>'span11', 'placeholder'=>'Search for a category...')) !!}
         {!! Form::submit('Search', array('class'=>'btn btn-default')) !!}
 
     {{ Form::close() }}

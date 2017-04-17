@@ -62,7 +62,7 @@
                             <div class="clear"></div>
                         </div>
                         <div class="row-form">
-                            <div class="span3">{!! Form::submit('Create', array('class'=>'btn btn-success')) !!}</div>
+                            <div class="span3">{!! Form::submit('Update', array('class'=>'btn btn-success')) !!}</div>
                             <div class="span9">
                                 @if (count($errors) > 0)
                                     <div class = "alert alert-danger">

@@ -11,72 +11,46 @@ use Validator;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index() 
     {
-        $categories = Category::paginate(10);
+        $categories = Category::orderBy('id', 'desc')->paginate(10);
         return view('Admin.Category.index')->with('categories', $categories);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('Admin.Category.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|unique:categories',
+        ]);
+
+        $user = new Category;
+        $user->name = Input::get('name');
+        $user->status = Input::get('status');
+        $user->save();
+
+        return redirect()->action('CategoryController@index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $category = Category::find($id);
         return view('Admin.Category.edit')->with('category', $category);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|unique:categories,id',
+            'name' => 'required|unique:categories,' .$id,
         ]);
 
         $user = Category::find($id);
@@ -86,14 +60,30 @@ class CategoryController extends Controller
         return redirect()->action('CategoryController@index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function action (Request $request)
     {
-        //
+        $checkedItems = $request->input('cb');
+        $listOfId = array_keys($checkedItems);
+
+        if ($request->input('active')) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        foreach ($listOfId as $id) {
+            $user = Category::find($id);
+            $user->status = $status;
+            $user->save();
+        }
+
+        return redirect()->action('CategoryController@index');
+    }
+
+    public function search (Request $request)
+    {
+        $query = $request->input('search');
+        $categories = Category::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
+        return view('Admin.Category.index', compact('categories', 'query'));
     }
 }

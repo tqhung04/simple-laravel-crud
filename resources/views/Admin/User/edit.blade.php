@@ -36,7 +36,7 @@
                             <div class="span3">Upload Avatar:</div>
                             <div class="span9">
                                 @if($user->avatar)
-                                    <img src="{{ asset("upload/$user->avatar") }}" alt="{{ $user->avatar }}" width="50px" height="50px">
+                                    <img src="{{ asset("upload/userImages/$user->avatar") }}" alt="{{ $user->avatar }}" width="50px" height="50px">
                                 @endif
                                 {{ Form::file('avatar', null) }}
                             </div>

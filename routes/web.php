@@ -17,7 +17,7 @@ Auth::routes();
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     // Default router
-    Route::get('/', 'UserController@index');
+    Route::get('/', 'ProductController@index');
 
     // Logout
     Route::get('/logout', 'LoginController@logout')->name('logout');
