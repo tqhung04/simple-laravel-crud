@@ -13,7 +13,9 @@
 <h4>2. Import database (db_mvc.sql)</h4>
 <h4>3. Download composer: https://getcomposer.org/download/</h4>
 <h4>4. Cd tới thư mục chứa project, download các packages mà project sử dụng: <b style="color: #f4645f; padding: 5px; background: bisque;">composer install</b></h4>
-<h4>5. Generate key: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan key:generate</b></h4>
-<h4>5. Clear cache: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan config:clear</b></h4>
-<h4>5. Khởi chạy serve: <b style="color: #f4645f; padding: 5px; background: bisque;">php artisan serve</b></h4>
-<h4>6. Kết nối tới : http://127.0.0.1:8000</h4>
+<h4>5. Copy file .env.example ra file .env: <b style="color: #f4645f; padding: 5px; background: bisque;"> cp .env.example .env</b></h4>
+<h4>6. Sửa các thông số trong file .env vừa tạo như: DB_DATABASE, DB_USERNAME, DB_PASSWORD v..v..</h4>
+<h4>7. Generate key: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan key:generate</b></h4>
+<h4>8. Clear cache: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan config:clear</b></h4>
+<h4>9. Khởi chạy serve: <b style="color: #f4645f; padding: 5px; background: bisque;">php artisan serve</b></h4>
+<h4>10. Kết nối tới : http://127.0.0.1:8000/admin</h4>
