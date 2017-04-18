@@ -39,7 +39,10 @@
                         </div> 
                         <div class="row-form">
                             <div class="span3">Upload Avatar:</div>
-                            <div class="span9">{{ Form::file('avatar', null) }}</div>
+                            <div class="span9">
+                                <input type="file" name="avatar" onchange="showImageWhileUploading(this)">
+                                <img id="blah" src="#" alt="your image" width="50px" height="50px"/>
+                            </div>
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
@@ -69,5 +72,23 @@
                 </div>
             </div>
 </div>
+
+<script type="text/javascript">
+
+        $('#blah').attr('src', '/upload/userImages/user_default.jpg');
+
+        function showImageWhileUploading(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah').attr('style', 'display:block');
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
 @stop

@@ -43,6 +43,8 @@ class UserController extends Controller {
             $path = public_path('upload/userImages');
             Input::file('avatar')->move($path, $filename);
             $user->avatar = $filename;
+        } else {
+            $user->avatar = 'user_default.jpg';
         }
 
         $user->save();
