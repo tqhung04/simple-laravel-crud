@@ -33,7 +33,7 @@
 
     <div class="admin">
         <div class="image">
-            <img src="{{ asset('upload/userImages/' . Auth::user()->avatar) }}" class="img-polaroid" width="50px" height="50px"/>
+            <img src="{{ asset('upload/' . Auth::user()->image) }}" class="img-polaroid" width="50px" height="50px"/>
         </div>
         <ul class="control">
             <li><span class="icon-cog"></span> <a href="{{ url('admin/user/'. Auth::user()->id .'/edit') }}">Update Profile</a></li>

@@ -19,44 +19,36 @@ class UserController extends Controller {
         return view('Admin.User.index')->with('users', $users);
     }
 
-    public function create() {
+    public function create()
+    {
         return view('Admin.User.create');
     }
 
-    public function store(Request $request) {
-
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'username' => 'required|unique:users',
             'password' => 'required|min:8',
             'email' => 'required|unique:users',
         ]);
 
+        $file = Input::file('image');
+
         $user = new User;
         $user->username = Input::get('username');
         $user->email = Input::get('email');
         $user->password = Hash::make(Input::get('password'));
         $user->status = Input::get('status');
-
-        if ( Input::file('avatar') ) {
-            $image = Input::file('avatar');
-            $filename  = $user->username . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/userImages');
-            Input::file('avatar')->move($path, $filename);
-            $user->avatar = $filename;
-        } else {
-            $user->avatar = 'user_default.jpg';
-        }
-
+        $user->image = $this->getNameOfFileUpload($user, $file);
         $user->save();
+
+        $this->handleFileUpload($file, $user->image);
 
         return redirect()->action('UserController@index');
     }
 
-    public function show($id) {
-
-    }
-
-    public function edit($id) {
+    public function edit($id)
+    {
         $user = User::find($id);
         return view('Admin.User.edit')->with('user', $user);
     }
@@ -69,20 +61,17 @@ class UserController extends Controller {
         ]);
 
         $user = User::find($id);
+        $file = Input::file('image');
 
-        $user->avatar = $this->getInputFileName($user);
-
+        $user->image = $this->getNameOfFileUpload($user, $file);
         $user->username = Input::get('username');
         $user->email = Input::get('email');
         $user->status = Input::get('status');
         $user->save();
 
+        $this->handleFileUpload($file, $user->image);
+
         return redirect()->action('UserController@index');
-
-    }
-
-    public function destroy($id) {
-        //
     }
 
     public function action (Request $request)
@@ -90,11 +79,7 @@ class UserController extends Controller {
         $checkedItems = $request->input('cb');
         $listOfId = array_keys($checkedItems);
 
-        if ($request->input('active')) {
-            $status = 0;
-        } else {
-            $status = 1;
-        }
+        $status = $request->input('active');
 
         foreach ($listOfId as $id) {
             $user = User::find($id);
@@ -109,16 +94,6 @@ class UserController extends Controller {
         $query = $request->input('search');
         $users = User::where('username', 'LIKE', '%'.$query.'%')->paginate(10);
         return view('Admin.User.index', compact('users', 'query'));
-    }
-
-    public function getInputFileName ($user) {
-        if ( Input::file('avatar') ) {
-            $image = Input::file('avatar');
-            $filename  = $user->username . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/userImages');
-            Input::file('avatar')->move($path, $filename);
-            return $filename;
-        }
     }
 }
 

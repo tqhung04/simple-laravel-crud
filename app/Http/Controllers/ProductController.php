@@ -43,24 +43,20 @@ class ProductController extends Controller
             'category' => 'required',
         ]);
 
+        $file = Input::file('image');
+
         $product = new Product;
         $product->name = Input::get('name');
         $product->price = Input::get('price');
         $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
-
-        if ( Input::file('image') ) {
-            $image = Input::file('image');
-            $filename  = $product->name . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/productImages/');
-            Input::file('image')->move($path, $filename);
-            $product->image = $filename;
-        }
-
+        $product->image = $this->getNameOfFileUpload($product, $file);
         $product->save();
 
-        return redirect()->action('UserController@index');
+        $this->handleFileUpload($file, $product->image);
+
+        return redirect()->action('ProductController@index');
     }
 
     public function edit($id)
@@ -68,9 +64,10 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         $categories = Category::get()->where('status', '=', '0');
-        $categoryList[0] = DB::table('categories')->where('id', $product->categories_id)->value('name');
+        $categoryList = [];
         foreach ($categories as $category) {
-            $categoryList[] = $category['name'];
+            $category = Category::where('name' , '=', $category['name'])->first();
+            $categoryList[$category['id']] = $category['name'];
         }
 
         return view('Admin.Product.edit')
@@ -87,28 +84,19 @@ class ProductController extends Controller
         ]);
 
         $product = Product::find($id);
+        $file = Input::file('image');
+
         $product->name = Input::get('name');
         $product->price = Input::get('price');
         $product->description = Input::get('password');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
-
-        if ( Input::file('image') ) {
-            $image = Input::file('image');
-            $filename  = $product->name . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/productImages/');
-            Input::file('image')->move($path, $filename);
-            $product->image = $filename;
-        }
-
+        $product->image = $this->getNameOfFileUpload($product, $file);
         $product->save();
 
-        return redirect()->action('ProductController@index');
-    }
+        $this->handleFileUpload($file, $product->image);
 
-    public function destroy($id)
-    {
-        //
+        return redirect()->action('ProductController@index');
     }
 
     public function action (Request $request)
@@ -116,11 +104,7 @@ class ProductController extends Controller
         $checkedItems = $request->input('cb');
         $listOfId = array_keys($checkedItems);
 
-        if ($request->input('active')) {
-            $status = 0;
-        } else {
-            $status = 1;
-        }
+        $status = $request->input('active');
 
         foreach ($listOfId as $id) {
             $product = Product::find($id);

@@ -54,7 +54,7 @@
                             <td>{{ $indexKey }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->price }}</td>
-                            <td><img src="{{ asset("upload/productImages/$product->image") }}" alt="{{ $product->name }}" width="50px" height="50px"></td>
+                            <td><img src="{{ asset("upload/$product->image") }}" alt="{{ $product->name }}" width="50px" height="50px"></td>
                             <td>{{ $product->created_at }}</td>
                             <td>{{ $product->updated_at }}</td>
                             @if( $product->status == 0 )

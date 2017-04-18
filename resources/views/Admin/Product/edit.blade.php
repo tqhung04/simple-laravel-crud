@@ -48,7 +48,7 @@
                             <div class="span3">Upload Image:</div>
                             <div class="span9">
                                 @if($product->image)
-                                    <img src="{{ asset("upload/productImages/$product->image") }}" alt="{{ $product->image }}" width="50px" height="50px">
+                                    <img src="{{ asset("upload/$product->image") }}" alt="{{ $product->image }}" width="50px" height="50px">
                                 @endif
                                 {{ Form::file('image', null) }}
                                 </div>

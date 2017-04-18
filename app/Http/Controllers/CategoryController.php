@@ -50,7 +50,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|unique:categories,' .$id,
+            'name' => 'required|unique:categories,name,' . $id,
         ]);
 
         $user = Category::find($id);
@@ -65,11 +65,7 @@ class CategoryController extends Controller
         $checkedItems = $request->input('cb');
         $listOfId = array_keys($checkedItems);
 
-        if ($request->input('active')) {
-            $status = 0;
-        } else {
-            $status = 1;
-        }
+        $status = $request->input('active');
 
         foreach ($listOfId as $id) {
             $user = Category::find($id);

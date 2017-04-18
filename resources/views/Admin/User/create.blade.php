@@ -40,7 +40,7 @@
                         <div class="row-form">
                             <div class="span3">Upload Avatar:</div>
                             <div class="span9">
-                                <input type="file" name="avatar" onchange="showImageWhileUploading(this)">
+                                <input type="file" name="image" onchange="showImageWhileUploading(this)">
                                 <img id="blah" src="#" alt="your image" width="50px" height="50px"/>
                             </div>
                             <div class="clear"></div>
