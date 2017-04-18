@@ -23,6 +23,7 @@ class ProductsTableSeeder extends DatabaseSeeder
                 'categories_id' => 1,
                 'image' => 'Iphone 1.jpg',
                 'status' => 0,
+                'created_at' => date("Y-m-d H:i:s")
             ],
             [
                 'id' => 2,
@@ -32,6 +33,7 @@ class ProductsTableSeeder extends DatabaseSeeder
                 'categories_id' => 2,
                 'image' => 'Tivi 1.jpg',
                 'status' => 0,
+                'created_at' => date("Y-m-d H:i:s")
             ],
         ];
 

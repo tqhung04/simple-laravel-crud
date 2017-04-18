@@ -70,13 +70,7 @@ class UserController extends Controller {
 
         $user = User::find($id);
 
-        if ( Input::file('avatar') ) {
-            $image = Input::file('avatar');
-            $filename  = $user->username . '.' . $image->getClientOriginalExtension();
-            $path = public_path('upload/userImages');
-            Input::file('avatar')->move($path, $filename);
-            $user->avatar = $filename;
-        }
+        $user->avatar = $this->getInputFileName($user);
 
         $user->username = Input::get('username');
         $user->email = Input::get('email');
@@ -115,6 +109,16 @@ class UserController extends Controller {
         $query = $request->input('search');
         $users = User::where('username', 'LIKE', '%'.$query.'%')->paginate(10);
         return view('Admin.User.index', compact('users', 'query'));
+    }
+
+    public function getInputFileName ($user) {
+        if ( Input::file('avatar') ) {
+            $image = Input::file('avatar');
+            $filename  = $user->username . '.' . $image->getClientOriginalExtension();
+            $path = public_path('upload/userImages');
+            Input::file('avatar')->move($path, $filename);
+            return $filename;
+        }
     }
 }
 

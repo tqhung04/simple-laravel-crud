@@ -19,11 +19,13 @@ class CategoriesTableSeeder extends DatabaseSeeder
                 'id' => 1,
                 'name' => 'Apple',
                 'status' => 0,
+                'created_at' => date("Y-m-d H:i:s")
             ],
             [
                 'id' => 2,
                 'name' => 'Toshiba',
                 'status' => 0,
+                'created_at' => date("Y-m-d H:i:s")
             ],
         ];
 

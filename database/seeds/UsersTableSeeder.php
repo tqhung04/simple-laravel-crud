@@ -22,7 +22,8 @@ class UsersTableSeeder extends DatabaseSeeder
                 'password' => bcrypt('12345678'),
                 'avatar' => 'admin.jpg',
                 'status' => 0,
-                'remember_token' => ''
+                'remember_token' => '',
+                'created_at' => date("Y-m-d H:i:s")
             ],
             [
                 'id' => 2,
@@ -31,7 +32,8 @@ class UsersTableSeeder extends DatabaseSeeder
                 'password' => bcrypt('12345678'),
                 'avatar' => 'guest.jpg',
                 'status' => 0,
-                'remember_token' => ''
+                'remember_token' => '',
+                'created_at' => date("Y-m-d H:i:s")
             ],
         ];
 
