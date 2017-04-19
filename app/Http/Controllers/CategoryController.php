@@ -63,14 +63,17 @@ class CategoryController extends Controller
     public function action (Request $request)
     {
         $checkedItems = $request->input('cb');
-        $listOfId = array_keys($checkedItems);
 
-        $status = $request->input('active');
+        if ( !empty($checkedItems) ) {
 
-        foreach ($listOfId as $id) {
-            $user = Category::find($id);
-            $user->status = $status;
-            $user->save();
+            $listOfId = array_keys($checkedItems);
+            $status = $this->getStatus($request->input('active'));
+
+            foreach ($listOfId as $id) {
+                $category = Category::find($id);
+                $category->status = $status;
+                $category->save();
+            }
         }
 
         return redirect()->action('CategoryController@index');

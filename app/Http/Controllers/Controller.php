@@ -11,15 +11,6 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function isFileUpload ($file) 
-    {
-        if ( $file ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function getNameOfFileUpload ($model, $file)
     {
         if ( $file ) {
@@ -30,6 +21,8 @@ class Controller extends BaseController
             }
         } else if ( !$file && $model->image != 'default.jpg' ) {
             $fileName = $model->image;
+        } else {
+            $fileName = 'default.jpg';
         }
 
         if ( $model->image == NULL ) {
@@ -44,6 +37,18 @@ class Controller extends BaseController
         if ( $file && $fileName != 'default.jpg') {
             $path = public_path('upload');
             $file->move($path, $fileName);
+        }
+    }
+
+    public function getStatus ($status)
+    {
+        if ( $status == 'Active' )
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
         }
     }
 }

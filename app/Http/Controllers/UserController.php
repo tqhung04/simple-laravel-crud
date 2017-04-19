@@ -29,7 +29,7 @@ class UserController extends Controller {
         $this->validate($request, [
             'username' => 'required|unique:users',
             'password' => 'required|min:8',
-            'email' => 'required|unique:users',
+            'email' => 'required|email|unique:users',
         ]);
 
         $file = Input::file('image');
@@ -57,12 +57,12 @@ class UserController extends Controller {
 
         $this->validate($request, [
             'username' => 'required|unique:users,username,'. $id,
-            'email' => 'required|unique:users,email,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
         ]);
 
-        $user = User::find($id);
         $file = Input::file('image');
 
+        $user = User::find($id);
         $user->image = $this->getNameOfFileUpload($user, $file);
         $user->username = Input::get('username');
         $user->email = Input::get('email');
@@ -77,14 +77,17 @@ class UserController extends Controller {
     public function action (Request $request)
     {
         $checkedItems = $request->input('cb');
-        $listOfId = array_keys($checkedItems);
 
-        $status = $request->input('active');
+        if ( !empty($checkedItems) ) {
 
-        foreach ($listOfId as $id) {
-            $user = User::find($id);
-            $user->status = $status;
-            $user->save();
+            $listOfId = array_keys($checkedItems);
+            $status = $this->getStatus($request->input('active'));
+
+            foreach ($listOfId as $id) {
+                $user = User::find($id);
+                $user->status = $status;
+                $user->save();
+            }
         }
 
         return redirect()->action('UserController@index');

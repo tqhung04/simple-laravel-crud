@@ -102,14 +102,17 @@ class ProductController extends Controller
     public function action (Request $request)
     {
         $checkedItems = $request->input('cb');
-        $listOfId = array_keys($checkedItems);
 
-        $status = $request->input('active');
+        if ( !empty($checkedItems) ) {
 
-        foreach ($listOfId as $id) {
-            $product = Product::find($id);
-            $product->status = $status;
-            $product->save();
+            $listOfId = array_keys($checkedItems);
+            $status = $this->getStatus($request->input('active'));
+
+            foreach ($listOfId as $id) {
+                $product = Product::find($id);
+                $product->status = $status;
+                $product->save();
+            }
         }
 
         return redirect()->action('ProductController@index');

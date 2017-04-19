@@ -75,7 +75,7 @@
 
 <script type="text/javascript">
 
-        $('#blah').attr('src', '/upload/userImages/user_default.jpg');
+        $('#blah').attr('src', '/upload/default.jpg');
 
         function showImageWhileUploading(input) {
             if (input.files && input.files[0]) {
