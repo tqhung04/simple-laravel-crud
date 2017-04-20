@@ -1,4 +1,4 @@
-@extends('zlayouts.master')
+@extends('Admin.zlayouts.index')
 
 @section('title', 'Category')
 
@@ -52,9 +52,9 @@
                             <td>{{ $indexKey }}</td>
                             <td>{{ $category->name }}</td>
                             @if( $category->status == 0 )
-                                <td><span class="text-success">Activated</span></td>
+                                <td><span class="text-success">Active</span></td>
                             @else
-                                <td><span class="text-error">Not actived</span></td>
+                                <td><span class="text-error">Deactive</span></td>
                             @endif
                             <td>{{ $category->created_at }}</td>
                             <td>{{ $category->updated_at }}</td>

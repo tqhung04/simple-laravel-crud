@@ -1,16 +1,18 @@
 <?php
+namespace App\Http\Controllers\Admin;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
-use Validator;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class CategoryController extends Controller
 {
+    use ValidatesRequests;
+
     public function index() 
     {
         $categories = Category::orderBy('id', 'desc')->paginate(10);
@@ -19,7 +21,7 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('Admin.Category.create');
+        return view('Admin.Category.create_update');
     }
 
     public function store(Request $request)
@@ -33,18 +35,13 @@ class CategoryController extends Controller
         $user->status = Input::get('status');
         $user->save();
 
-        return redirect()->action('CategoryController@index');
-    }
-
-    public function show($id)
-    {
-        //
+        return redirect()->action('Admin\CategoryController@index');
     }
 
     public function edit($id)
     {
         $category = Category::find($id);
-        return view('Admin.Category.edit')->with('category', $category);
+        return view('Admin.Category.create_update')->with('category', $category);
     }
 
     public function update(Request $request, $id)
@@ -53,11 +50,12 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name,' . $id,
         ]);
 
-        $user = Category::find($id);
-        $user->name = Input::get('name');
-        $user->save();
+        $category = Category::find($id);
+        $category->name = Input::get('name');
+        $category->status = Input::get('status');
+        $category->save();
 
-        return redirect()->action('CategoryController@index');
+        return redirect()->action('Admin\CategoryController@index');
     }
 
     public function action (Request $request)
@@ -76,13 +74,20 @@ class CategoryController extends Controller
             }
         }
 
-        return redirect()->action('CategoryController@index');
+        return redirect()->action('Admin\CategoryController@index');
     }
 
     public function search (Request $request)
     {
-        $query = $request->input('search');
-        $categories = Category::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
-        return view('Admin.Category.index', compact('categories', 'query'));
+        $this->validate($request, [
+            'search' => 'required',
+        ]);
+
+        $query = Input::get('search');
+
+        if ( $this->isSpaceString($query) === false ) {
+            $categories = Category::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
+            return view('Admin.Category.index', compact('categories', 'query'));
+        }
     }
 }

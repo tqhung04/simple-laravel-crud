@@ -1,10 +1,10 @@
-@extends('zlayouts.master')
+@extends('Admin.zlayouts.index')
 
 @section('title', 'Product')
 
 @section('breadline')
-    <li><a href="{{ url('admin/product') }}">List Products</a></li>
-@stop
+<li><a href="{{ url('admin/product') }}">List Products</a> <span class="divider"></span></li>
+@endsection
 
 @section('search')
     {{ Form::open(array('url' => 'admin/product/search', 'method' => 'get')) }}
@@ -17,14 +17,13 @@
 @stop
 
 @section('content')
-    <div class="row-fluid">
 
+    <div class="row-fluid">
         <div class="span12">
 
             <div class="head">
                 <div class="isw-grid"></div>
-                <h1>Users Management</h1>
-
+                <h1>Product Management</h1>
                 <div class="clear"></div>
             </div>
 
@@ -79,7 +78,7 @@
                 
                 <div class="clear"></div>
             </div>
-        </div>
 
+        </div>
     </div>
-@stop
+@endsection

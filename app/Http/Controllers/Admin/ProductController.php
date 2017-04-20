@@ -1,25 +1,24 @@
 <?php
+namespace App\Http\Controllers\Admin;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
-use Validator;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use DB;
 
 class ProductController extends Controller
 {
+    use ValidatesRequests;
 
     public function index()
     {
         $products = Product::orderBy('id', 'desc')->paginate(10);
-
-        return view('Admin.Product.index')
-            ->with('products', $products);
+        return view('Admin.Product.index')->with('products', $products);
     }
 
     public function create()
@@ -31,7 +30,7 @@ class ProductController extends Controller
             $categoryList[$category['id']] = $category['name'];
         }
 
-        return view('Admin.Product.create')
+        return view('Admin.Product.create_update')
             ->with('categoryList', $categoryList);
     }
 
@@ -56,7 +55,7 @@ class ProductController extends Controller
 
         $this->handleFileUpload($file, $product->image);
 
-        return redirect()->action('ProductController@index');
+        return redirect()->action('Admin\ProductController@index');
     }
 
     public function edit($id)
@@ -64,14 +63,17 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         $categories = Category::get()->where('status', '=', '0');
+        $current_category[$product->categories_id] = Category::get()->where('id', '=', $product->categories_id);
         $categoryList = [];
+
         foreach ($categories as $category) {
             $category = Category::where('name' , '=', $category['name'])->first();
             $categoryList[$category['id']] = $category['name'];
         }
 
-        return view('Admin.Product.edit')
+        return view('Admin.Product.create_update')
             ->with('categoryList', $categoryList)
+            ->with('current_category', $current_category[$product->categories_id])
             ->with('product', $product);
     }
 
@@ -88,7 +90,7 @@ class ProductController extends Controller
 
         $product->name = Input::get('name');
         $product->price = Input::get('price');
-        $product->description = Input::get('password');
+        $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
         $product->image = $this->getNameOfFileUpload($product, $file);
@@ -96,7 +98,7 @@ class ProductController extends Controller
 
         $this->handleFileUpload($file, $product->image);
 
-        return redirect()->action('ProductController@index');
+        return redirect()->action('Admin\ProductController@index');
     }
 
     public function action (Request $request)
@@ -115,12 +117,20 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->action('ProductController@index');
+        return redirect()->action('Admin\ProductController@index');
     }
 
-    public function search (Request $request) {
-        $query = $request->input('search');
-        $products = Product::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
-        return view('Admin.product.index', compact('products', 'query'));
+    public function search (Request $request)
+    {
+        $this->validate($request, [
+            'search' => 'required',
+        ]);
+
+        $query = Input::get('search');
+
+        if ( $this->isSpaceString($query) === false ) {
+            $products = Product::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
+            return view('Admin.Product.index', compact('products', 'query'));
+        }
     }
 }

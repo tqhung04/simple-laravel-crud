@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -62,7 +62,7 @@ class LoginController extends Controller
                 'password'  => Input::get('password')
             ], $remember
         );
-
+        die('die!');
         if ( $dataOfInput ) {
             return redirect()->intended($this->redirectTo());
         } else {

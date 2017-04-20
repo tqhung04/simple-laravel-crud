@@ -14,20 +14,18 @@ class CategoriesTableSeeder extends DatabaseSeeder
     {
         DB::table('categories')->delete();
 
-        $categories = [
-            [
-                'id' => 1,
-                'name' => 'Apple',
+        $categories = [];
+
+        for($i = 1; $i<25; $i++) {
+
+            $categories[$i] = [
+                'id' => $i,
+                'name' => 'Cate' . $i,
                 'status' => 0,
-                'created_at' => date("Y-m-d H:i:s")
-            ],
-            [
-                'id' => 2,
-                'name' => 'Toshiba',
-                'status' => 0,
-                'created_at' => date("Y-m-d H:i:s")
-            ],
-        ];
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s")
+            ];
+        }
 
         DB::table('categories')->insert($categories);
     }

@@ -16,12 +16,6 @@
 </head>
 <body>
 
-<div class="header">
-    <a class="logo" href="list-categories.html">
-        <img src="{{ asset("img/logo.png") }}" alt="NTQ Solution - Admin Control Panel" title="NTQ Solution - Admin Control Panel"/>
-    </a>
-</div>
-
 <div class="menu">
 
     <div class="breadLine">

@@ -23,19 +23,25 @@ class UsersTableSeeder extends DatabaseSeeder
                 'image' => 'admin.jpg',
                 'status' => 0,
                 'remember_token' => '',
-                'created_at' => date("Y-m-d H:i:s")
-            ],
-            [
-                'id' => 2,
-                'username' => 'guest',
-                'email' => 'guest@gmail.com',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s")
+            ]
+        ];
+
+        for($i = 2; $i<25; $i++) {
+
+            $users[$i] = [
+                'id' => $i,
+                'username' => 'guest' . $i,
+                'email' => 'guest' . $i . '@gmail.com',
                 'password' => bcrypt('12345678'),
                 'image' => 'guest.jpg',
                 'status' => 0,
                 'remember_token' => '',
-                'created_at' => date("Y-m-d H:i:s")
-            ],
-        ];
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s")
+            ];
+        }
 
         DB::table('users')->insert($users);
     }

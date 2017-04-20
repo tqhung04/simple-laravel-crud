@@ -13,29 +13,22 @@ class ProductsTableSeeder extends DatabaseSeeder
     public function run()
     {
         DB::table('categories')->delete();
+        $products = [];
 
-        $products = [
-            [
-                'id' => 1,
-                'name' => 'Iphone 1',
-                'price' => 12000,
-                'description' => 'This is description of iphone 1',
-                'categories_id' => 1,
-                'image' => 'Iphone 1.jpg',
-                'status' => 0,
-                'created_at' => date("Y-m-d H:i:s")
-            ],
-            [
-                'id' => 2,
-                'name' => 'Tivi 1',
+        for($i = 1; $i<25; $i++) {
+
+            $products[$i] = [
+                'id' => $i,
+                'name' => 'Tivi'. $i,
                 'price' => 20000,
-                'description' => 'This is description of tivi 1',
+                'description' => 'This is description of tivi' . $i,
                 'categories_id' => 2,
                 'image' => 'Tivi 1.jpg',
                 'status' => 0,
-                'created_at' => date("Y-m-d H:i:s")
-            ],
-        ];
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ];
+        }
 
         DB::table('products')->insert($products);
     }

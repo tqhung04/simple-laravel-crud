@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
-use Validator;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Hash;
 use DB; 
 
-class UserController extends Controller {
+class UserController extends Controller
+{
+    use ValidatesRequests;
+
+    protected $model = 'User';
 
     public function index()
     {
@@ -21,7 +26,7 @@ class UserController extends Controller {
 
     public function create()
     {
-        return view('Admin.User.create');
+        return view('Admin.User.create_update');
     }
 
     public function store(Request $request)
@@ -44,19 +49,20 @@ class UserController extends Controller {
 
         $this->handleFileUpload($file, $user->image);
 
-        return redirect()->action('UserController@index');
+        return redirect()->action('Admin\UserController@index');
     }
 
     public function edit($id)
     {
         $user = User::find($id);
-        return view('Admin.User.edit')->with('user', $user);
+        return view('Admin.User.create_update')->with('user', $user);
     }
 
     public function update(Request $request, $id) {
 
         $this->validate($request, [
             'username' => 'required|unique:users,username,'. $id,
+            'password' => 'required|min:8',
             'email' => 'required|email|unique:users,email,' . $id,
         ]);
 
@@ -66,12 +72,13 @@ class UserController extends Controller {
         $user->image = $this->getNameOfFileUpload($user, $file);
         $user->username = Input::get('username');
         $user->email = Input::get('email');
+        $user->password = Hash::make(Input::get('password'));
         $user->status = Input::get('status');
         $user->save();
 
         $this->handleFileUpload($file, $user->image);
 
-        return redirect()->action('UserController@index');
+        return redirect()->action('Admin\UserController@index');
     }
 
     public function action (Request $request)
@@ -90,13 +97,21 @@ class UserController extends Controller {
             }
         }
 
-        return redirect()->action('UserController@index');
+        return redirect()->action('Admin\UserController@index');
     }
 
-    public function search (Request $request) {
-        $query = $request->input('search');
-        $users = User::where('username', 'LIKE', '%'.$query.'%')->paginate(10);
-        return view('Admin.User.index', compact('users', 'query'));
+    public function search (Request $request)
+    {
+        $this->validate($request, [
+            'search' => 'required',
+        ]);
+
+        $query = Input::get('search');
+
+        if ( $this->isSpaceString($query) === false ) {
+            $users = User::where('username', 'LIKE', '%'.$query.'%')->paginate(10);
+            return view('Admin.User.index', compact('users', 'query'));
+        }
     }
 }
 

@@ -1,10 +1,16 @@
-@extends('zlayouts.master')
+@extends('Admin.zlayouts.index')
 
 @section('title', 'Category')
 
 @section('breadline')
 <li><a href="{{ url('admin/category') }}">List Categories</a> <span class="divider">></span></li>
-<li class="active">Add</li>
+<li class="active">
+    @if(isset($category))
+        Update
+    @else
+        Create
+    @endif
+</li>
 @stop
 
 @section('content')
@@ -13,29 +19,45 @@
             <div class="span12">
                 <div class="head">
                     <div class="isw-grid"></div>
-                    <h1>Users Management</h1>
+                    <h1>Categories Management</h1>
 
                     <div class="clear"></div>
                 </div>
                 <div class="block-fluid">
-                    {!! Form::open(['action' => 'CategoryController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
-                        {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
+                    @if(isset($category->id))
+                        {!! Form::open(['action' => ['Admin\CategoryController@update', $category->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @else
+                        {!! Form::open(['action' => 'Admin\CategoryController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @endif
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row-form">
                             <div class="span3">Category name:</div>
                             <div class="span9">
-                                {{ Form::text('name', null, array('placeholder'=>'some text value...')) }}
+                                <input type="text" name="name" placeholder="some text value" value="@if(isset($category->name)){{ $category->name }}@endif" required="true"/>
                             </div>
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
                             <div class="span3">Activate:</div>
                             <div class="span9">
-                                {{ Form::select('status', ['0' => 'Active', '1' => 'Deactivate']) }}
+                                @if ( isset($category->status) && $category->status == 0 ) 
+                                   <select name="status" required="true">
+                                        <option value="0">Active</option>
+                                        <option value="1">Deactivate</option>
+                                    </select>
+                                @else
+                                    <select name="status" required="true">
+                                        <option value="1">Deactive</option>
+                                        <option value="0">Active</option>
+                                    </select>
+                                @endif
                             </div>
                             <div class="clear"></div>
                         </div>
                         <div class="row-form">
-                            <div class="span3">{!! Form::submit('Create', array('class'=>'btn btn-success')) !!}</div>
+                            <div class="span3">
+                                <input type="submit" class="btn btn-success"/>
+                            </div>
                             <div class="span9">
                                 @if (count($errors) > 0)
                                     <div class = "alert alert-danger">

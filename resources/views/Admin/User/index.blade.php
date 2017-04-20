@@ -1,4 +1,4 @@
-@extends('zlayouts.master')
+@extends('Admin.zlayouts.index')
 
 @section('title', 'User')
 

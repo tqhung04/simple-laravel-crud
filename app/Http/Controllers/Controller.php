@@ -9,7 +9,15 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    protected $model = '';
+
+    // public function index()
+    // {
+    //     $data = $this->model::orderBy('id', 'desc')->paginate(10);
+    //     return view("Admin.$this->model.index")->with('data', $data);
+    // }
+
+    // use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function getNameOfFileUpload ($model, $file)
     {
@@ -49,6 +57,17 @@ class Controller extends BaseController
         else
         {
             return 1;
+        }
+    }
+
+    public function isSpaceString ($string) {
+        if ( ctype_space($string) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

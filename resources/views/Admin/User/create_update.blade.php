@@ -1,10 +1,16 @@
-@extends('zlayouts.master')
+@extends('Admin.zlayouts.index')
 
 @section('title', 'User')
 
 @section('breadline')
 <li><a href="{{ url('admin/user') }}">List Users</a> <span class="divider">></span></li>
-<li class="active">Add</li>
+<li class="active">
+    @if(isset($user))
+        Update
+    @else
+        Create
+    @endif
+</li>
 @stop
 
 @section('content')
@@ -18,42 +24,62 @@
                     <div class="clear"></div>
                 </div>
                 <div class="block-fluid">
-                    {!! Form::open(['action' => 'UserController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @if(isset($user->id))
+                        {!! Form::open(['action' => ['Admin\UserController@update', $user->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @else
+                        {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @endif
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row-form">
                             <div class="span3">Username:</div>
                             <div class="span9">
-                                {{ Form::text('username', null, array('placeholder'=>'some text value...')) }}
+                                <input type="text" name="username" placeholder="some text value" value="@if(isset($user->username)){{ $user->username }}@endif" required="true"/>
                             </div>
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
                             <div class="span3">Email:</div>
-                            <div class="span9">{{ Form::text('email', null, array('placeholder'=>'some text value...')) }}</div>
+                            <div class="span9">
+                                <input type="text" name="email" placeholder="some text value" value="@if(isset($user->email)){{ $user->email }}@endif" required="true"/>
+                            </div>
                             <div class="clear"></div>
-                        </div> 
+                        </div>
                         <div class="row-form">
                             <div class="span3">Password:</div>
-                            <div class="span9">{{ Form::password('password', null, array('placeholder'=>'some text value...')) }}</div>
+                            <div class="span9">
+                                <input type="password" name="password" placeholder="some text value" required="true"/>
+                            </div>
                             <div class="clear"></div>
-                        </div> 
+                        </div>
                         <div class="row-form">
                             <div class="span3">Upload Avatar:</div>
                             <div class="span9">
-                                <input type="file" name="image" onchange="showImageWhileUploading(this)">
-                                <img id="blah" src="#" alt="your image" width="50px" height="50px"/>
+                                @if(isset($user->image))
+                                    <img src="{{ asset("upload/$user->image") }}" alt="{{ $user->image }}" width="50px" height="50px">
+                                @endif
+                                {{ Form::file('image', null) }}
                             </div>
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
                             <div class="span3">Activate:</div>
                             <div class="span9">
-                                {{ Form::select('status', ['0' => 'Active', '1' => 'Deactivate']) }}
+                                @if ( isset($user->status) && $user->status == 0 ) 
+                                   <select name="status" required="true">
+                                        <option value="0">Active</option>
+                                        <option value="1">Deactivate</option>
+                                    </select>
+                                @else
+                                    <select name="status" required="true">
+                                        <option value="1">Deactive</option>
+                                        <option value="0">Active</option>
+                                    </select>
+                                @endif
                             </div>
                             <div class="clear"></div>
                         </div>
                         <div class="row-form">
-                            <div class="span3">{!! Form::submit('Create', array('class'=>'btn btn-success')) !!}</div>
+                            <div class="span3">{!! Form::submit('Update', array('class'=>'btn btn-success')) !!}</div>
                             <div class="span9">
                                 @if (count($errors) > 0)
                                     <div class = "alert alert-danger">
@@ -72,23 +98,5 @@
                 </div>
             </div>
 </div>
-
-<script type="text/javascript">
-
-        $('#blah').attr('src', '/upload/default.jpg');
-
-        function showImageWhileUploading(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#blah').attr('style', 'display:block');
-                    $('#blah').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
 
 @stop
