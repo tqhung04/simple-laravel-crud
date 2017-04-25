@@ -8,21 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Validator;
 
 class CategoryController extends Controller
 {
     use ValidatesRequests;
 
-    public function index() 
-    {
-        $categories = Category::orderBy('id', 'desc')->paginate(10);
-        return view('Admin.Category.index')->with('categories', $categories);
-    }
-
-    public function create()
-    {
-        return view('Admin.Category.create_update');
-    }
+    protected $_model = 'Category';
+    protected $_message = [
+        'status.error' => 'This category has product'
+    ];
 
     public function store(Request $request)
     {
@@ -38,56 +33,29 @@ class CategoryController extends Controller
         return redirect()->action('Admin\CategoryController@index');
     }
 
-    public function edit($id)
-    {
-        $category = Category::find($id);
-        return view('Admin.Category.create_update')->with('category', $category);
-    }
-
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|unique:categories,name,' . $id,
-        ]);
+        ])->validate();
 
         $category = Category::find($id);
         $category->name = Input::get('name');
         $category->status = Input::get('status');
+
+        // Deactive Category
+        if ( $category->status == 1 ) {
+            $haveProducts = $category->haveProducts($id);
+            if ( $haveProducts ) {
+                $category->status = 0;
+                return redirect()->back()->with('status_error', 'This category had product');
+            }
+        }
+
         $category->save();
 
         return redirect()->action('Admin\CategoryController@index');
     }
 
-    public function action (Request $request)
-    {
-        $checkedItems = $request->input('cb');
 
-        if ( !empty($checkedItems) ) {
-
-            $listOfId = array_keys($checkedItems);
-            $status = $this->getStatus($request->input('active'));
-
-            foreach ($listOfId as $id) {
-                $category = Category::find($id);
-                $category->status = $status;
-                $category->save();
-            }
-        }
-
-        return redirect()->action('Admin\CategoryController@index');
-    }
-
-    public function search (Request $request)
-    {
-        $this->validate($request, [
-            'search' => 'required',
-        ]);
-
-        $query = Input::get('search');
-
-        if ( $this->isSpaceString($query) === false ) {
-            $categories = Category::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
-            return view('Admin.Category.index', compact('categories', 'query'));
-        }
-    }
 }

@@ -5,7 +5,7 @@
 @section('breadline')
 <li><a href="{{ url('admin/user') }}">List Users</a> <span class="divider">></span></li>
 <li class="active">
-    @if(isset($user))
+    @if(isset($data))
         Update
     @else
         Create
@@ -24,8 +24,8 @@
                     <div class="clear"></div>
                 </div>
                 <div class="block-fluid">
-                    @if(isset($user->id))
-                        {!! Form::open(['action' => ['Admin\UserController@update', $user->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @if(isset($data->id))
+                        {!! Form::open(['action' => ['Admin\UserController@update', $data->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
                     @else
                         {!! Form::open(['action' => 'Admin\UserController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
                     @endif
@@ -33,14 +33,14 @@
                         <div class="row-form">
                             <div class="span3">Username:</div>
                             <div class="span9">
-                                <input type="text" name="username" placeholder="some text value" value="@if(isset($user->username)){{ $user->username }}@endif" required="true"/>
+                                <input type="text" name="username" placeholder="some text value" value="@if(isset($data->username)){{ $data->username }}@endif" required="true"/>
                             </div>
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
                             <div class="span3">Email:</div>
                             <div class="span9">
-                                <input type="text" name="email" placeholder="some text value" value="@if(isset($user->email)){{ $user->email }}@endif" required="true"/>
+                                <input type="text" name="email" placeholder="some text value" value="@if(isset($data->email)){{ $data->email }}@endif" required="true"/>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -54,8 +54,8 @@
                         <div class="row-form">
                             <div class="span3">Upload Avatar:</div>
                             <div class="span9">
-                                @if(isset($user->image))
-                                    <img src="{{ asset("upload/$user->image") }}" alt="{{ $user->image }}" width="50px" height="50px">
+                                @if(isset($data->image))
+                                    <img src="{{ asset("upload/$data->image") }}" alt="{{ $data->image }}" width="50px" height="50px">
                                 @endif
                                 {{ Form::file('image', null) }}
                             </div>
@@ -64,7 +64,7 @@
                         <div class="row-form">
                             <div class="span3">Activate:</div>
                             <div class="span9">
-                                @if ( isset($user->status) && $user->status == 0 ) 
+                                @if ( isset($data->status) && $data->status == 0 ) 
                                    <select name="status" required="true">
                                         <option value="0">Active</option>
                                         <option value="1">Deactivate</option>

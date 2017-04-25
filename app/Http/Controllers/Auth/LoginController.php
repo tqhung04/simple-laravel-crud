@@ -49,7 +49,7 @@ class LoginController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
-    public function index () {
+    public function login () {
         return view("Admin.Auth.login");
     }
 
@@ -59,10 +59,10 @@ class LoginController extends Controller
         $dataOfInput = Auth::attempt(
             [
                 'username'  => strtolower(Input::get('username')),
-                'password'  => Input::get('password')
+                'password'  => Input::get('password'),
+                'status' => 0
             ], $remember
         );
-        die('die!');
         if ( $dataOfInput ) {
             return redirect()->intended($this->redirectTo());
         } else {

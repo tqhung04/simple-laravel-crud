@@ -59,7 +59,7 @@
                                     <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
                                 @endforeach
                             @endif
-                            @foreach($categoryList as $key => $category)
+                            @foreach($active_categories as $key => $category)
                                 <option value="{{ $key }}">{{ $category }}</option>
                             @endforeach
                         </select>

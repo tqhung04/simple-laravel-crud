@@ -5,7 +5,7 @@
 @section('breadline')
 <li><a href="{{ url('admin/category') }}">List Categories</a> <span class="divider">></span></li>
 <li class="active">
-    @if(isset($category))
+    @if(isset($data))
         Update
     @else
         Create
@@ -24,8 +24,8 @@
                     <div class="clear"></div>
                 </div>
                 <div class="block-fluid">
-                    @if(isset($category->id))
-                        {!! Form::open(['action' => ['Admin\CategoryController@update', $category->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
+                    @if(isset($data->id))
+                        {!! Form::open(['action' => ['Admin\CategoryController@update', $data->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
                     @else
                         {!! Form::open(['action' => 'Admin\CategoryController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
                     @endif
@@ -33,14 +33,14 @@
                         <div class="row-form">
                             <div class="span3">Category name:</div>
                             <div class="span9">
-                                <input type="text" name="name" placeholder="some text value" value="@if(isset($category->name)){{ $category->name }}@endif" required="true"/>
+                                <input type="text" name="name" placeholder="some text value" value="@if(isset($data->name)){{ $data->name }}@endif" required="true"/>
                             </div>
                             <div class="clear"></div>
                         </div> 
                         <div class="row-form">
                             <div class="span3">Activate:</div>
                             <div class="span9">
-                                @if ( isset($category->status) && $category->status == 0 ) 
+                                @if ( isset($data->status) && $data->status == 0 ) 
                                    <select name="status" required="true">
                                         <option value="0">Active</option>
                                         <option value="1">Deactivate</option>
@@ -59,6 +59,11 @@
                                 <input type="submit" class="btn btn-success"/>
                             </div>
                             <div class="span9">
+                                @if (session('status_error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('status_error') }}
+                                    </div>
+                                @endif
                                 @if (count($errors) > 0)
                                     <div class = "alert alert-danger">
                                     <ul>

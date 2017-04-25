@@ -12,4 +12,13 @@ class Product extends Authenticatable
     protected $fillable = [
         'id', 'name', 'price', 'description', 'image', 'categories_id'
     ];
+
+    public function createProduct ($product)
+    {
+        $product->save();
+    }
+
+    public function categories() {
+        return $this->belongsTo('App\Category')->withTrashed();
+    }
 }

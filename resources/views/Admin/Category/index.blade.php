@@ -30,7 +30,7 @@
 
             <div class="block-fluid table-sorting">
                 <a href="{{ url('admin/category/create') }}" class="btn btn-add">Add Category</a>
-                {{ Form::open(array('url' => 'admin/category/action', 'method' => 'POST' )) }}
+                {{ Form::open(array('url' => 'admin/category/bulkAction', 'method' => 'POST' )) }}
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <table cellpadding="0" cellspacing="0" width="100%" class="table" id="tSortable_2">
@@ -46,15 +46,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($categories as $indexKey => $category)
+                        @foreach ($datas as $indexKey => $category)
                         <tr>
                             <td><input type="checkbox" name="cb[{{ $category->id }}]"/></td>
-                            <td>{{ $indexKey }}</td>
+                            <td>{{ $category->id }}</td>
                             <td>{{ $category->name }}</td>
                             @if( $category->status == 0 )
-                                <td><span class="text-success">Active</span></td>
+                                <td><span class="text-success">Actived</span></td>
                             @else
-                                <td><span class="text-error">Deactive</span></td>
+                                <td><span class="text-error">Deactived</span></td>
                             @endif
                             <td>{{ $category->created_at }}</td>
                             <td>{{ $category->updated_at }}</td>
@@ -70,7 +70,7 @@
                     </div><!-- /bulk-action-->
                 {{ Form::close() }}
                 </form>
-                    {{ $categories->render() }}
+                    {{ $datas->render() }}
                 </div>
                 
                 <div class="clear"></div>

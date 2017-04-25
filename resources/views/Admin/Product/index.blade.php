@@ -47,19 +47,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($products as $indexKey => $product)
+                        @foreach ($datas as $indexKey => $product)
                         <tr>
                             <td><input type="checkbox" name="cb[{{ $product->id }}]"/></td>
-                            <td>{{ $indexKey }}</td>
+                            <td>{{ $product->id }}</td>
                             <td>{{ $product->name }}</td>
-                            <td>{{ $product->price }}</td>
+                            <td>{{ $product->price }} VNĐ</td>
                             <td><img src="{{ asset("upload/$product->image") }}" alt="{{ $product->name }}" width="50px" height="50px"></td>
                             <td>{{ $product->created_at }}</td>
                             <td>{{ $product->updated_at }}</td>
                             @if( $product->status == 0 )
-                                <td><span class="text-success">Activated</span></td>
+                                <td><span class="text-success">Actived</span></td>
                             @else
-                                <td><span class="text-error">Not actived</span></td>
+                                <td><span class="text-error">Deactived</span></td>
                             @endif
                             <td><a href="{{ url('admin/product/' . $product->id . '/edit') }}" class="btn btn-info">Edit</a></td>
                         </tr>
@@ -73,7 +73,7 @@
                     </div>
                 {{ Form::close() }}
                 </form>
-                    {{ $products->render() }}
+                    {{ $datas->render() }}
                 </div>
                 
                 <div class="clear"></div>

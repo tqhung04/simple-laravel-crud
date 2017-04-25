@@ -16,18 +16,7 @@ class UserController extends Controller
 {
     use ValidatesRequests;
 
-    protected $model = 'User';
-
-    public function index()
-    {
-        $users = User::orderBy('id', 'desc')->paginate(10);
-        return view('Admin.User.index')->with('users', $users);
-    }
-
-    public function create()
-    {
-        return view('Admin.User.create_update');
-    }
+    protected $_model = 'User';
 
     public function store(Request $request)
     {
@@ -52,12 +41,6 @@ class UserController extends Controller
         return redirect()->action('Admin\UserController@index');
     }
 
-    public function edit($id)
-    {
-        $user = User::find($id);
-        return view('Admin.User.create_update')->with('user', $user);
-    }
-
     public function update(Request $request, $id) {
 
         $this->validate($request, [
@@ -79,39 +62,6 @@ class UserController extends Controller
         $this->handleFileUpload($file, $user->image);
 
         return redirect()->action('Admin\UserController@index');
-    }
-
-    public function action (Request $request)
-    {
-        $checkedItems = $request->input('cb');
-
-        if ( !empty($checkedItems) ) {
-
-            $listOfId = array_keys($checkedItems);
-            $status = $this->getStatus($request->input('active'));
-
-            foreach ($listOfId as $id) {
-                $user = User::find($id);
-                $user->status = $status;
-                $user->save();
-            }
-        }
-
-        return redirect()->action('Admin\UserController@index');
-    }
-
-    public function search (Request $request)
-    {
-        $this->validate($request, [
-            'search' => 'required',
-        ]);
-
-        $query = Input::get('search');
-
-        if ( $this->isSpaceString($query) === false ) {
-            $users = User::where('username', 'LIKE', '%'.$query.'%')->paginate(10);
-            return view('Admin.User.index', compact('users', 'query'));
-        }
     }
 }
 

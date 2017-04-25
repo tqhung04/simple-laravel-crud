@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App;
 use App\Product;
 use App\Category;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
@@ -15,23 +16,15 @@ class ProductController extends Controller
 {
     use ValidatesRequests;
 
-    public function index()
-    {
-        $products = Product::orderBy('id', 'desc')->paginate(10);
-        return view('Admin.Product.index')->with('products', $products);
-    }
+    protected $_model = 'Product';
 
     public function create()
     {
-        $categories = Category::get()->where('status', '=', '0');
-        $categoryList = [];
-        foreach ($categories as $category) {
-            $category = Category::where('name' , '=', $category['name'])->first();
-            $categoryList[$category['id']] = $category['name'];
-        }
+        $category = new Category();
+        $active_categories = $category->getActiveCategories();
 
         return view('Admin.Product.create_update')
-            ->with('categoryList', $categoryList);
+            ->with('active_categories', $active_categories);
     }
 
     public function store(Request $request)
@@ -51,7 +44,7 @@ class ProductController extends Controller
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
         $product->image = $this->getNameOfFileUpload($product, $file);
-        $product->save();
+        $product->createProduct($product);
 
         $this->handleFileUpload($file, $product->image);
 
@@ -72,7 +65,7 @@ class ProductController extends Controller
         }
 
         return view('Admin.Product.create_update')
-            ->with('categoryList', $categoryList)
+            ->with('active_categories', $categoryList)
             ->with('current_category', $current_category[$product->categories_id])
             ->with('product', $product);
     }
@@ -94,43 +87,10 @@ class ProductController extends Controller
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
         $product->image = $this->getNameOfFileUpload($product, $file);
-        $product->save();
+        $product->createProduct($product);
 
         $this->handleFileUpload($file, $product->image);
 
         return redirect()->action('Admin\ProductController@index');
-    }
-
-    public function action (Request $request)
-    {
-        $checkedItems = $request->input('cb');
-
-        if ( !empty($checkedItems) ) {
-
-            $listOfId = array_keys($checkedItems);
-            $status = $this->getStatus($request->input('active'));
-
-            foreach ($listOfId as $id) {
-                $product = Product::find($id);
-                $product->status = $status;
-                $product->save();
-            }
-        }
-
-        return redirect()->action('Admin\ProductController@index');
-    }
-
-    public function search (Request $request)
-    {
-        $this->validate($request, [
-            'search' => 'required',
-        ]);
-
-        $query = Input::get('search');
-
-        if ( $this->isSpaceString($query) === false ) {
-            $products = Product::where('name', 'LIKE', '%'.$query.'%')->paginate(10);
-            return view('Admin.Product.index', compact('products', 'query'));
-        }
     }
 }
