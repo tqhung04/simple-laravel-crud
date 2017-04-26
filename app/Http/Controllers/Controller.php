@@ -110,10 +110,6 @@ class Controller extends BaseController
             $fileName = 'default.jpg';
         }
 
-        if ( $model->image == NULL ) {
-            $fileName = 'default.jpg';
-        }
-
         return $fileName;
     }
 
@@ -124,9 +120,6 @@ class Controller extends BaseController
             switch ( $this->_model ) {
                 case 'User':
                     $path = public_path('upload/user');
-                    break;
-                case 'Category':
-                    $path = public_path('upload/category');
                     break;
                 case 'Product':
                     $path = public_path('upload/product');

@@ -39,7 +39,6 @@
                             <th width="10%" class="sorting"><a href="#">No</a></th>
                             <th width="30%" class="sorting"><a href="#">Product Name</a></th>
                             <th width="15%" class="sorting"><a href="#">Price</a></th>
-                            <th width="15%" class="sorting"><a href="#">Image</a></th>
                             <th width="10%" class="sorting"><a href="#">Time Created</a></th>
                             <th width="10%" class="sorting"><a href="#">Time Updated</a></th>
                             <th width="10%" class="sorting"><a href="#">Active</a></th>
@@ -53,7 +52,6 @@
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->price }} VNĐ</td>
-                            <td><img src="{{ asset("upload/product/$product->image") }}" alt="{{ $product->name }}" width="50px" height="50px"></td>
                             <td>{{ $product->created_at }}</td>
                             <td>{{ $product->updated_at }}</td>
                             @if( $product->status == 0 )

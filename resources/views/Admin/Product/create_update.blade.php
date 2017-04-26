@@ -72,10 +72,11 @@
                         <div id="files">
                             <input type="file" name="images[]" id="upload_file" onchange="preview_image()" multiple="true"/>
                         </div>
-                        {{-- {!! Form::file('images[]', array('multiple'=>true)) !!} --}}
                         <div id="image_preview">
-                            @if(isset($product->image))
-                                <img src="{{ asset("upload/product/$product->image") }}" alt="{{ $product->image }}" width="50px" height="50px">
+                            @if(isset($images))
+                                @foreach($images as $image)
+                                    <img src="{{ asset("upload/product/$image") }}" alt="{{ $image }}" width="50px" height="50px">
+                                @endforeach
                             @else
                                 <img src="{{ asset("upload/product/default.jpg") }}" alt="default" width="50px" height="50px">
                             @endif

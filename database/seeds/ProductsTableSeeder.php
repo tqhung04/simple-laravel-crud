@@ -23,7 +23,6 @@ class ProductsTableSeeder extends DatabaseSeeder
                 'price' => 20000,
                 'description' => 'This is description of tivi' . $i,
                 'categories_id' => 2,
-                'image' => 'default.jpg',
                 'status' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),

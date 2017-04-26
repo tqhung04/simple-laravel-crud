@@ -21,6 +21,5 @@ function preview_image() {
     console.log(file_name);
     for(var i=0;i<total_file;i++) {
         $('#image_preview').append("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[i])+"'/>");
-        $('#files').append("<input type='file' name='images[]' value='" + file_name + "' hidden/>");
     }
 }
