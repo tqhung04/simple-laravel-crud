@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use DB;
 
 class Product extends Authenticatable
 {
@@ -20,5 +21,10 @@ class Product extends Authenticatable
 
     public function categories() {
         return $this->belongsTo('App\Category')->withTrashed();
+    }
+
+    public function getTheHighestId() {
+        $product = DB::table('products')->max('id');
+        return $product;
     }
 }

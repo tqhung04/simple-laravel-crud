@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App;
 use App\Product;
+use App\ProductImages;
 use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -31,22 +32,34 @@ class ProductController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|unique:products',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|max:999999999',
             'category' => 'required',
         ]);
 
-        $file = Input::file('image');
-
+        // Create product
         $product = new Product;
         $product->name = Input::get('name');
         $product->price = Input::get('price');
         $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
-        $product->image = $this->getNameOfFileUpload($product, $file);
         $product->createProduct($product);
 
-        $this->handleFileUpload($file, $product->image);
+        // Create images of product
+        $files = $request->input('images');
+
+        foreach ($files as $key => $value) {
+
+            $product = new Product();
+            $highestIdOfProduct = $product->getTheHighestId();
+
+            $productImages = new ProductImages();
+            $productImages->name = Input::get('name') . '_' . $key;
+            $productImages->products_id = $highestIdOfProduct + 1;
+            $productImages->createProductImage($productImages);
+
+            $this->handleFileUpload($value, $productImages->name);
+        }
 
         return redirect()->action('Admin\ProductController@index');
     }
@@ -74,7 +87,7 @@ class ProductController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|unique:products,name,' .$id,
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|max:999999999',
             'category' => 'required',
         ]);
 

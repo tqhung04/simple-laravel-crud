@@ -76,6 +76,11 @@
                 <div class="clear"></div>
             </div>
         </div>
-
+        @if (session('status_error'))
+            <div class="alert alert-danger" id="danger-alert">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>Deactive category failed! Category had product.</strong>
+            </div>
+        @endif
     </div>
 @stop

@@ -60,8 +60,9 @@
                             </div>
                             <div class="span9">
                                 @if (session('status_error'))
-                                    <div class="alert alert-danger">
-                                        {{ session('status_error') }}
+                                    <div class="alert alert-danger" id="danger-alert">
+                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                        <strong>Deactive category failed! Category had product.</strong>
                                     </div>
                                 @endif
                                 @if (count($errors) > 0)

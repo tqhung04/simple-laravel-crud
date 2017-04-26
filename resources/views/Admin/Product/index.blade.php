@@ -53,7 +53,7 @@
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->price }} VNĐ</td>
-                            <td><img src="{{ asset("upload/$product->image") }}" alt="{{ $product->name }}" width="50px" height="50px"></td>
+                            <td><img src="{{ asset("upload/product/$product->image") }}" alt="{{ $product->name }}" width="50px" height="50px"></td>
                             <td>{{ $product->created_at }}</td>
                             <td>{{ $product->updated_at }}</td>
                             @if( $product->status == 0 )

@@ -8,10 +8,13 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\User;
+use App\Category;
+use App\Product;
 
 class Controller extends BaseController
 {
     protected $_model = '';
+    protected $_message = '';
     protected $_sortBy = '';
     static $_order = '';
 
@@ -34,9 +37,13 @@ class Controller extends BaseController
 
     public function edit($id)
     {
-        $model = 'App\\' . $this->_model;
-        $data = $model::find($id);
-        return view('Admin.'. $this->_model .'.create_update')->with('data', $data);
+        $data = $this->getObjectById($id);
+
+        if ( $data ) {
+            return view('Admin.'. $this->_model .'.create_update')->with('data', $data);
+        } else {
+            return view('errors.404');
+        }
     }
 
     public function bulkAction (Request $request)
@@ -52,11 +59,26 @@ class Controller extends BaseController
             foreach ($listOfId as $id) {
                 $data = $model::find($id);
                 $data->status = $status;
+
+                // Deactive Category
+                if ( $this->_model == 'Category' ) {
+                    if ( $data->status == 1 ) {
+                        $category = new Category();
+                        $haveProducts = $category->haveProducts($id);
+                        if ( $haveProducts ) {
+                            $data->status = 0;
+                            return redirect()->back()->with('status_error', 'This category had product');
+                        }
+                    }
+                }
+
                 $data->save();
             }
-        }
 
-        return redirect()->action('Admin\\'. $this->_model .'Controller@index');
+            return redirect()->action('Admin\\'. $this->_model .'Controller@index');
+        } else {
+            return redirect()->back()->with('');
+        }
     }
 
     public function search (Request $request)
@@ -98,7 +120,19 @@ class Controller extends BaseController
     public function handleFileUpload ($file, $fileName)
     {
         if ( $file && $fileName != 'default.jpg') {
-            $path = public_path('upload');
+
+            switch ( $this->_model ) {
+                case 'User':
+                    $path = public_path('upload/user');
+                    break;
+                case 'Category':
+                    $path = public_path('upload/category');
+                    break;
+                case 'Product':
+                    $path = public_path('upload/product');
+                    break;
+            }
+
             $file->move($path, $fileName);
         }
     }
@@ -114,7 +148,7 @@ class Controller extends BaseController
             return 1;
         }
     }
-    
+
     public function isSpaceString ($string) {
         if ( ctype_space($string) )
         {
@@ -122,6 +156,17 @@ class Controller extends BaseController
         }
         else
         {
+            return false;
+        }
+    }
+
+    public function getObjectById($id) {
+        $model = 'App\\' . $this->_model;
+        $data = $model::find($id);
+
+        if ( $data ) {
+            return $data;
+        } else {
             return false;
         }
     }
