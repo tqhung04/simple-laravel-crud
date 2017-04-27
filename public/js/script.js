@@ -13,6 +13,9 @@ $(function(ready){
     $( ".close" ).click(function() {
       $( ".alert" ).fadeOut( "slow" );
     });
+
+    // Hide message
+    $('.message').delay(3000).slideUp();
 });
 
 function preview_image() {

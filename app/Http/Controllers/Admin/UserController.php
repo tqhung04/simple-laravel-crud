@@ -38,7 +38,7 @@ class UserController extends Controller
 
         $this->handleFileUpload($file, $user->image);
 
-        return redirect()->action('Admin\UserController@index');
+        return redirect()->action('Admin\UserController@index')->with(['flash_level'=>'success','flash_message' => 'Create User Success']);
     }
 
     public function update(Request $request, $id) {
@@ -61,7 +61,7 @@ class UserController extends Controller
 
         $this->handleFileUpload($file, $user->image);
 
-        return redirect()->action('Admin\UserController@index');
+        return redirect()->action('Admin\UserController@index')->with(['flash_level'=>'success','flash_message' => 'Update User Success']);
     }
 }
 

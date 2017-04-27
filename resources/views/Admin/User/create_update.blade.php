@@ -33,7 +33,7 @@
                         <div class="row-form">
                             <div class="span3">Username:</div>
                             <div class="span9">
-                                <input type="text" name="username" placeholder="some text value" value="@if(isset($data->username)){{ $data->username }}@endif" required="true"/>
+                                <input type="text" name="username" placeholder="some text value" value="@if(isset($data->username)){{ $data->username }}@else{{ old('username') }}@endif" required="true"/>
                                 @if( $errors->first('username') )
                                     <div class = "alert alert-danger">
                                         {!! $errors->first('username') !!}
@@ -45,7 +45,7 @@
                         <div class="row-form">
                             <div class="span3">Email:</div>
                             <div class="span9">
-                                <input type="text" name="email" placeholder="some text value" value="@if(isset($data->email)){{ $data->email }}@endif" required="true"/>
+                                <input type="text" name="email" placeholder="some text value" value="@if(isset($data->email)){{ $data->email }}@else{{ old('email') }}@endif" required="true"/>
                                 @if( $errors->first('email') )
                                     <div class = "alert alert-danger">
                                         {!! $errors->first('email') !!}
@@ -57,7 +57,7 @@
                         <div class="row-form">
                             <div class="span3">Password:</div>
                             <div class="span9">
-                                <input type="password" name="password" placeholder="some text value" required="true"/>
+                                <input type="password" name="password" placeholder="some text value" value="{{ old('email') }}" required="true"/>
                                 @if( $errors->first('password') )
                                     <div class = "alert alert-danger">
                                         {!! $errors->first('password') !!}

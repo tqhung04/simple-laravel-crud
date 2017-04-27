@@ -51,10 +51,10 @@ class ProductController extends Controller
             $product->createProduct($product);
             $this->createImagesOfProduct($request);
         } else {
-            return redirect()->back()->with('category_error', 'This category has been removed');
+            return redirect()->back()->with(['flash_level'=>'failed','flash_message' => 'Category has been removed']);
         }
 
-        return redirect()->action('Admin\ProductController@index');
+        return redirect()->action('Admin\ProductController@index')->with(['flash_level'=>'success','flash_message' => 'Create Product Success']);;
     }
 
     public function edit($id)
@@ -90,7 +90,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|unique:products,name,' .$id,
+            'name' => 'required|unique:products,name,' . $id,
             'price' => 'required|numeric|max:999999999',
             'category' => 'required',
             'images[]' => 'mimes:jpg,jpeg,png,gif|max:2048'
@@ -111,10 +111,10 @@ class ProductController extends Controller
             $product->createProduct($product);
             $this->createImagesOfProduct($request, $id);
         } else {
-            return redirect()->back()->with('category_error', 'This category has been removed');
+            return redirect()->back()->with(['flash_level'=>'failed','flash_message' => 'Category has been removed']);
         }
 
-        return redirect()->action('Admin\ProductController@index');
+        return redirect()->action('Admin\ProductController@index')->with(['flash_level'=>'success','flash_message' => 'Update Product Success']);;
     }
 
     public function createImagesOfProduct($request, $id = null)

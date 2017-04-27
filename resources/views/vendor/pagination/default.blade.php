@@ -23,36 +23,36 @@
     @endif
 @else
     @if($paginator->currentPage() - 3 > 0 && ($paginator->currentPage()+2) < $paginator->lastPage())
-        <a class="paginate_active" href="">...</a>
+        <a class="paginate_button">...</a>
         @for($i = $paginator->currentPage() - 2; $i <= $paginator->currentPage() + 2; $i++)
-                <span>
-                @if ($i == $paginator->currentPage())
-                    <a class="paginate_active" href="{{ $elements[0][$i] }}">{{ $i }}</a>
-                @else
-                    <a class="paginate_button" href="{{ $elements[0][$i] }}">{{ $i }}</a>
-                @endif
-                </span>
-            @endfor
-        <a class="paginate_active" href="">...</a>
+            <span>
+            @if ($i == $paginator->currentPage())
+                <a class="paginate_active" href="{{ $paginator->url($i) }}">{{ $i }}</a>
+            @else
+                <a class="paginate_button" href="{{ $paginator->url($i) }}">{{ $i }}</a>
+            @endif
+            </span>
+        @endfor
+        <a class="paginate_button">...</a>
     @elseif($paginator->currentPage() - 3 <= 0)
             @for($i = 1; $i <= $paginator->currentPage() + 2; $i++)
                 <span>
                 @if ($i == $paginator->currentPage())
-                    <a class="paginate_active" href="{{ $elements[0][$i] }}">{{ $i }}</a>
+                    <a class="paginate_active" href="{{ $paginator->url($i) }}">{{ $i }}</a>
                 @else
-                    <a class="paginate_button" href="{{ $elements[0][$i] }}">{{ $i }}</a>
+                    <a class="paginate_button" href="{{ $paginator->url($i) }}">{{ $i }}</a>
                 @endif
                 </span>
             @endfor
-        <a class="paginate_active" href="">...</a>
+        <a class="paginate_button">...</a>
     @elseif($paginator->currentPage() >= $paginator->lastPage()-3)
-        <a class="paginate_active" href="">...</a>
+        <a class="paginate_button" disbale>...</a>
         @for($i = $paginator->currentPage() - 2; $i <= $paginator->lastPage(); $i++)
             <span>
             @if ($i == $paginator->currentPage())
-                <a class="paginate_active" href="{{ $elements[0][$i] }}">{{ $i }}</a>
+                <a class="paginate_active" href="{{ $paginator->url($i) }}">{{ $i }}</a>
             @else
-                <a class="paginate_button" href="{{ $elements[0][$i] }}">{{ $i }}</a>
+                <a class="paginate_button" href="{{ $paginator->url($i) }}">{{ $i }}</a>
             @endif
             </span>
         @endfor

@@ -15,6 +15,7 @@ class Controller extends BaseController
 {
     protected $_model = '';
     protected $_message = '';
+    protected $_pagination = 15;
     protected $_sortBy = '';
     static $_order = '';
 
@@ -25,7 +26,14 @@ class Controller extends BaseController
 
         $model = 'App\\' . $this->_model;
 
-        $datas = $model::orderBy($sortBy, $order)->paginate(10);
+        $datas = $model::orderBy($sortBy, $order)->paginate($this->_pagination);
+
+        if ( isset($_GET['page']) && $_GET['page'] > $datas->total()/$this->_pagination + 1)
+        {
+            return view('errors.404');
+        }
+
+        // die(var_dump($datas->total()/$this->_pagination));
 
         return view('Admin.'. $this->_model .'.index')->with('datas', $datas);
     }
@@ -92,12 +100,27 @@ class Controller extends BaseController
             'search' => 'required',
         ]);
 
-        $query = $request->input('search');
+        switch ($this->_model) {
+            case 'User':
+                $column = 'username';
+                break;
+            case 'Product':
+                $column = 'name';
+                break;
+            case 'Product':
+                $column = 'name';
+                break;
+            default:
+                $column = 'name';
+                break;
+        }
+        $keyword = $request->input('search');
 
-        if ( $this->isSpaceString($query) === false ) {
+        if ( $this->isSpaceString($keyword) === false ) {
             $model = 'App\\' . $this->_model;
-            $datas = $model::where('username', 'LIKE', '%'.$query.'%')->paginate(10);
-            return view('Admin.'. $this->_model .'.index', compact('datas', 'query'));
+            $datas = $model::where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
+            // die(var_dump(count($datas)));
+            return view('Admin.'. $this->_model .'.index', compact('datas', 'keyword'))->with(['flash_level'=>'success','flash_message' => 'AAAAAAAAAAA']);
         }
     }
 

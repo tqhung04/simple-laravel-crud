@@ -30,7 +30,7 @@ class CategoryController extends Controller
         $user->status = Input::get('status');
         $user->save();
 
-        return redirect()->action('Admin\CategoryController@index');
+        return redirect()->action('Admin\CategoryController@index')->with(['flash_level'=>'success','flash_message' => 'Create Category Success']);
     }
 
     public function update(Request $request, $id)
@@ -48,7 +48,7 @@ class CategoryController extends Controller
             $haveProducts = $category->haveProducts($id);
             if ( $haveProducts ) {
                 $category->status = 0;
-                return redirect()->back()->with('status_error', 'This category had product');
+                return redirect()->back()->with(['flash_level'=>'failed','flash_message' => 'This category had product']);
             }
         }
 

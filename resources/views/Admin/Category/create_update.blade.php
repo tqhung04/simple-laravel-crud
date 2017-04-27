@@ -33,7 +33,7 @@
                         <div class="row-form">
                             <div class="span3">Category name:</div>
                             <div class="span9">
-                                <input type="text" name="name" placeholder="some text value" value="@if(isset($data->name)){{ $data->name }}@endif" required="true"/>
+                                <input type="text" name="name" placeholder="some text value" value="@if(isset($data->name)){{ $data->name }}@else{{ old('name') }}@endif" required="true"/>
                                 @if( $errors->first('name') )
                                     <div class = "alert alert-danger">
                                         {!! $errors->first('name') !!}
@@ -64,10 +64,9 @@
                                 <input type="submit" class="btn btn-success"/>
                             </div>
                             <div class="span9">
-                                @if (session('status_error'))
-                                    <div class="alert alert-danger" id="danger-alert">
-                                        <button type="button" class="close" data-dismiss="alert">x</button>
-                                        <strong>Deactive category failed! Category had product.</strong>
+                                @if(Session::has('flash_message'))
+                                    <div class="alert alert-{!! @Session::get('flash_level') !!}">
+                                        {!! @Session::get('flash_message') !!}
                                     </div>
                                 @endif
                             </div>

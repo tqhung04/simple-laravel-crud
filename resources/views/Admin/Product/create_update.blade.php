@@ -32,7 +32,7 @@
                 <div class="row-form">
                     <div class="span3">Product Name:</div>
                     <div class="span9">
-                        <input type="text" name="name" placeholder="some text value" value="@if(isset($product->name)){{ $product->name }}@endif" required="true"/>
+                        <input type="text" name="name" placeholder="some text value" value="@if(isset($product->name)){{ $product->name }}@else{{ old('name') }}@endif" required="true"/>
                         @if( $errors->first('name') )
                             <div class = "alert alert-danger">
                                 {!! $errors->first('name') !!}
@@ -44,7 +44,7 @@
                 <div class="row-form">
                     <div class="span3">Price:</div>
                     <div class="span9">
-                        <input type="text" name="price" placeholder="some text value" value="@if(isset($product->price)){{ $product->price }}@endif" required="true"/>
+                        <input type="text" name="price" placeholder="some text value" value="@if(isset($product->price)){{ $product->price }}@else{{ old('price') }}@endif" required="true"/>
                         @if( $errors->first('price') )
                             <div class = "alert alert-danger">
                                 {!! $errors->first('price') !!}
@@ -56,7 +56,7 @@
                 <div class="row-form">
                     <div class="span3">Description:</div>
                     <div class="span9">
-                        <textarea name="description" placeholder="some text value"/>@if(isset($product->description)){{ $product->description }}@endif</textarea>
+                        <textarea name="description" placeholder="some text value"/>@if(isset($product->description)){{ $product->description }}@else{{ old('description') }}@endif</textarea>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -73,10 +73,9 @@
                                 <option value="{{ $key }}">{{ $category }}</option>
                             @endforeach
                         </select>
-                        @if (session('category_error'))
-                            <div class="alert alert-danger" id="danger-alert" style="  margin: 10px 0 0 0; padding: 3px 10px;">
-                                <button type="button" class="close" data-dismiss="alert" style="top: 3px; right: 0px;">x</button>
-                                <strong>This category has been removed</strong>
+                        @if(Session::has('flash_message'))
+                            <div class="alert alert-{!! @Session::get('flash_level') !!}">
+                                {!! @Session::get('flash_message') !!}
                             </div>
                         @endif
                         @if( $errors->first('category') )
