@@ -29,12 +29,18 @@
             </div>
 
             <div class="block-fluid table-sorting">
-                <a href="{{ url('admin/user/create') }}" class="btn btn-add">Add User</a>
-                @if(Session::has('flash_message'))
-                    <div class="alert alert-{!! @Session::get('flash_level') !!}">
-                        {!! @Session::get('flash_message') !!}
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <a href="{{ url('admin/user/create') }}" class="btn btn-add">Add User</a>
+                        </div>
+                        <div class="span9" style="text-align: left; padding-top: 15px">
+                            @if(isset($search_message))
+                                 <span class="">
+                                    ___{{ $search_message }}___
+                                </span>
+                            @endif
+                        </div>
                     </div>
-                @endif
                 {{ Form::open(array('url' => 'admin/user/bulkAction', 'method' => 'POST' )) }}
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -76,7 +82,9 @@
                     </div><!-- /bulk-action-->
                 {{ Form::close() }}
                 </form>
-                    {{ $datas->render() }}
+                {{-- {{ $datas->render() }} --}}
+                {{ $datas->appends(['search'])->links() }}
+                {{-- {{ $datas->fragment('search')->links() }} --}}
                 </div>
                 @if(Session::has('flash_message'))
                      <div class="message alert alert-{!! @Session::get('flash_level') !!}">

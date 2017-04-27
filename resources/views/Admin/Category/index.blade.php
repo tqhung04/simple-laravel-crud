@@ -31,7 +31,18 @@
             </div>
 
             <div class="block-fluid table-sorting">
-                <a href="{{ url('admin/category/create') }}" class="btn btn-add">Add Category</a>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <a href="{{ url('admin/category/create') }}" class="btn btn-add">Add Category</a>
+                    </div>
+                    <div class="span9" style="text-align: left; padding-top: 15px">
+                        @if(isset($search_message))
+                             <span class="">
+                                ___{{ $search_message }}___
+                            </span>
+                        @endif
+                    </div>
+                </div>
                 {{ Form::open(array('url' => 'admin/category/bulkAction', 'method' => 'POST' )) }}
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">

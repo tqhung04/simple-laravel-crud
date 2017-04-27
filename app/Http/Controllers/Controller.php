@@ -56,10 +56,6 @@ class Controller extends BaseController
 
     public function bulkAction (Request $request)
     {
-        // $this->validate($request, [
-        //     'cb' => 'required',
-        // ]);
-
         $checkedItems = $request->input('cb');
 
         if ( !empty($checkedItems) ) {
@@ -83,10 +79,8 @@ class Controller extends BaseController
                         }
                     }
                 }
-
                 $data->save();
             }
-
             return redirect()->action('Admin\\'. $this->_model .'Controller@index');
         }
         else {
@@ -119,8 +113,12 @@ class Controller extends BaseController
         if ( $this->isSpaceString($keyword) === false ) {
             $model = 'App\\' . $this->_model;
             $datas = $model::where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
+            // $datas->appends(Request::only('search'))->links();
+            $datas->appends(['search' => $_GET['search']]);
             // die(var_dump(count($datas)));
-            return view('Admin.'. $this->_model .'.index', compact('datas', 'keyword'))->with(['flash_level'=>'success','flash_message' => 'AAAAAAAAAAA']);
+            return view('Admin.'. $this->_model .'.index')
+                    ->with('datas', $datas)
+                    ->with('search_message', 'About '. $datas->total() .' results');
         }
     }
 
