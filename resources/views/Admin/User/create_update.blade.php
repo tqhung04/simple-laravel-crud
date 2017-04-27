@@ -34,6 +34,11 @@
                             <div class="span3">Username:</div>
                             <div class="span9">
                                 <input type="text" name="username" placeholder="some text value" value="@if(isset($data->username)){{ $data->username }}@endif" required="true"/>
+                                @if( $errors->first('username') )
+                                    <div class = "alert alert-danger">
+                                        {!! $errors->first('username') !!}
+                                    </div>
+                                @endif
                             </div>
                             <div class="clear"></div>
                         </div> 
@@ -41,6 +46,11 @@
                             <div class="span3">Email:</div>
                             <div class="span9">
                                 <input type="text" name="email" placeholder="some text value" value="@if(isset($data->email)){{ $data->email }}@endif" required="true"/>
+                                @if( $errors->first('email') )
+                                    <div class = "alert alert-danger">
+                                        {!! $errors->first('email') !!}
+                                    </div>
+                                @endif
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -48,6 +58,11 @@
                             <div class="span3">Password:</div>
                             <div class="span9">
                                 <input type="password" name="password" placeholder="some text value" required="true"/>
+                                @if( $errors->first('password') )
+                                    <div class = "alert alert-danger">
+                                        {!! $errors->first('password') !!}
+                                    </div>
+                                @endif
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -83,15 +98,6 @@
                         <div class="row-form">
                             <div class="span3">{!! Form::submit('Update', array('class'=>'btn btn-success')) !!}</div>
                             <div class="span9">
-                                @if (count($errors) > 0)
-                                    <div class = "alert alert-danger">
-                                    <ul>
-                                    @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                    @endforeach
-                                    </ul>
-                                    </div>
-                                @endif
                             </div>
                             <div class="clear"></div>
                         </div>

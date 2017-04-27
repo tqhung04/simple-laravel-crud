@@ -48,6 +48,10 @@ class Controller extends BaseController
 
     public function bulkAction (Request $request)
     {
+        // $this->validate($request, [
+        //     'cb' => 'required',
+        // ]);
+
         $checkedItems = $request->input('cb');
 
         if ( !empty($checkedItems) ) {
@@ -76,8 +80,9 @@ class Controller extends BaseController
             }
 
             return redirect()->action('Admin\\'. $this->_model .'Controller@index');
-        } else {
-            return redirect()->back()->with('');
+        }
+        else {
+            return redirect()   ->back()->with('bulk_error', 'Ahihi');
         }
     }
 

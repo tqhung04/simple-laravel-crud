@@ -34,6 +34,11 @@
                             <div class="span3">Category name:</div>
                             <div class="span9">
                                 <input type="text" name="name" placeholder="some text value" value="@if(isset($data->name)){{ $data->name }}@endif" required="true"/>
+                                @if( $errors->first('name') )
+                                    <div class = "alert alert-danger">
+                                        {!! $errors->first('name') !!}
+                                    </div>
+                                @endif
                             </div>
                             <div class="clear"></div>
                         </div> 
@@ -63,15 +68,6 @@
                                     <div class="alert alert-danger" id="danger-alert">
                                         <button type="button" class="close" data-dismiss="alert">x</button>
                                         <strong>Deactive category failed! Category had product.</strong>
-                                    </div>
-                                @endif
-                                @if (count($errors) > 0)
-                                    <div class = "alert alert-danger">
-                                    <ul>
-                                    @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                    @endforeach
-                                    </ul>
                                     </div>
                                 @endif
                             </div>

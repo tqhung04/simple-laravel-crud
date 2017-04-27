@@ -33,6 +33,11 @@
                     <div class="span3">Product Name:</div>
                     <div class="span9">
                         <input type="text" name="name" placeholder="some text value" value="@if(isset($product->name)){{ $product->name }}@endif" required="true"/>
+                        @if( $errors->first('name') )
+                            <div class = "alert alert-danger">
+                                {!! $errors->first('name') !!}
+                            </div>
+                        @endif
                     </div>
                     <div class="clear"></div>
                 </div> 
@@ -40,6 +45,11 @@
                     <div class="span3">Price:</div>
                     <div class="span9">
                         <input type="text" name="price" placeholder="some text value" value="@if(isset($product->price)){{ $product->price }}@endif" required="true"/>
+                        @if( $errors->first('price') )
+                            <div class = "alert alert-danger">
+                                {!! $errors->first('price') !!}
+                            </div>
+                        @endif
                     </div>
                     <div class="clear"></div>
                 </div> 
@@ -63,6 +73,17 @@
                                 <option value="{{ $key }}">{{ $category }}</option>
                             @endforeach
                         </select>
+                        @if (session('category_error'))
+                            <div class="alert alert-danger" id="danger-alert" style="  margin: 10px 0 0 0; padding: 3px 10px;">
+                                <button type="button" class="close" data-dismiss="alert" style="top: 3px; right: 0px;">x</button>
+                                <strong>This category has been removed</strong>
+                            </div>
+                        @endif
+                        @if( $errors->first('category') )
+                            <div class = "alert alert-danger">
+                                {!! $errors->first('category') !!}
+                            </div>
+                        @endif
                     </div>
                     <div class="clear"></div>
                 </div> 
@@ -106,15 +127,6 @@
                         <input type="submit" class="btn btn-success">
                     </div>
                     <div class="span9">
-                        @if (count($errors) > 0)
-                            <div class = "alert alert-danger">
-                            <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                            </ul>
-                            </div>
-                        @endif
                     </div>
                     <div class="clear"></div>
                 </div>

@@ -32,7 +32,7 @@ class ProductController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|unique:products',
-            'price' => 'required|numeric|max:999999999',
+            'price' => 'required|numeric|max:999999999|min:0',
             'category' => 'required',
         ]);
 
@@ -43,35 +43,48 @@ class ProductController extends Controller
         $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
-        $product->createProduct($product);
 
-        $this->createImagesOfProduct($request);
+        $category = new Category();
+        $checkActiveCategoryById = $category->checkActiveCategoryById($product->categories_id);
+
+        if ($checkActiveCategoryById) {
+            $product->createProduct($product);
+            $this->createImagesOfProduct($request);
+        } else {
+            return redirect()->back()->with('category_error', 'This category has been removed');
+        }
 
         return redirect()->action('Admin\ProductController@index');
     }
 
     public function edit($id)
     {
-        // Get Images of Product
-        $images = $this->getImagesOfProduct($id);
-        
-
         $product = Product::find($id);
 
-        $categories = Category::get()->where('status', '=', '0');
-        $current_category[$product->categories_id] = Category::get()->where('id', '=', $product->categories_id);
-        $categoryList = [];
+        if ( $product ) {
+            // Get Images of Product
+            $images = $this->getImagesOfProduct($id);
+            
 
-        foreach ($categories as $category) {
-            $category = Category::where('name' , '=', $category['name'])->first();
-            $categoryList[$category['id']] = $category['name'];
+            $product = Product::find($id);
+
+            $categories = Category::get()->where('status', '=', '0');
+            $current_category[$product->categories_id] = Category::get()->where('id', '=', $product->categories_id);
+            $categoryList = [];
+
+            foreach ($categories as $category) {
+                $category = Category::where('name' , '=', $category['name'])->first();
+                $categoryList[$category['id']] = $category['name'];
+            }
+
+            return view('Admin.Product.create_update')
+                ->with('images', $images)
+                ->with('active_categories', $categoryList)
+                ->with('current_category', $current_category[$product->categories_id])
+                ->with('product', $product);
+        } else {
+            return view('errors.404');
         }
-
-        return view('Admin.Product.create_update')
-            ->with('images', $images)
-            ->with('active_categories', $categoryList)
-            ->with('current_category', $current_category[$product->categories_id])
-            ->with('product', $product);
     }
 
     public function update(Request $request, $id)
@@ -90,9 +103,16 @@ class ProductController extends Controller
         $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
-        $product->createProduct($product);
 
-        $this->createImagesOfProduct($request, $id);
+        $category = new Category();
+        $checkActiveCategoryById = $category->checkActiveCategoryById($product->categories_id);
+
+        if ($checkActiveCategoryById) {
+            $product->createProduct($product);
+            $this->createImagesOfProduct($request, $id);
+        } else {
+            return redirect()->back()->with('category_error', 'This category has been removed');
+        }
 
         return redirect()->action('Admin\ProductController@index');
     }

@@ -46,4 +46,18 @@ class Category extends Authenticatable
             return true;
         }
     }
+
+    public function checkActiveCategoryById($categoryId) {
+        $category = DB::table('categories')
+                ->where([
+                    ['id', '=', $categoryId],
+                    ['status', '=', 0]
+                ])->get();
+
+        if ( count($category) == 0 ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
