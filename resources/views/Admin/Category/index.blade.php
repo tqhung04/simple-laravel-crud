@@ -10,7 +10,7 @@
     {{ Form::open(array('url' => 'admin/category/search', 'method' => 'get')) }}
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
         @if( isset($_GET['search']) )
-            {!! Form::text('search', $_GET['search'], array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
+            {!! Form::text('search', $_GET['search'], array('required', 'class'=>'span11', 'placeholder'=>'Search for a category...')) !!}
         @else
             {!! Form::text('search', null, array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
         @endif

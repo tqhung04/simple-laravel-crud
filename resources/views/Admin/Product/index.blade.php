@@ -9,13 +9,28 @@
 @section('search')
     {{ Form::open(array('url' => 'admin/product/search', 'method' => 'get')) }}
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-        @if( isset($_GET['search']) )
-            {!! Form::text('search', $_GET['search'], array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
-        @else
-            {!! Form::text('search', null, array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
-        @endif
+        <input type="radio" id="search_name" name="search_type" value="name" checked="checked" onclick="generateName()"> Name
+        <input type="radio" id="search_price" name="search_type" value="price" onclick="generatePrice()"> Price
+        <input type="radio" id="search_date" name="search_type" value="date" onclick="generateDate()"> Date<br>
+        <div id="form_generate">
+            <div id="form_name">
+                @if( isset($_GET['name']) )
+                    {!! Form::text('name', $_GET['name'], array('required', 'class'=>'span11')) !!}
+                @else
+                    {!! Form::text('name', null, array('required', 'class'=>'span11')) !!}
+                @endif
+            </div>
+            <div id="form_price">
+
+                <select name='price' id="price" onchange="setSelected()">
+                    <option value='<100000'>< 100000 VNĐ</option>
+                    <option value='10000~500000'>10000~500000 VNĐ</option>
+                    <option value='>500000'> > 500000 VNĐ</option>
+                </select>
+            </div>
+        </div>
         {!! Form::submit('Search', array('class'=>'btn btn-default')) !!}
-    {{ Form::close() }}
+        {{ Form::close() }}
 @stop
 
 @section('content')

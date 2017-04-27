@@ -93,7 +93,6 @@ class Controller extends BaseController
         $this->validate($request, [
             'search' => 'required',
         ]);
-
         switch ($this->_model) {
             case 'User':
                 $column = 'username';

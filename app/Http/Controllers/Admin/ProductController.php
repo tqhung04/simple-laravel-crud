@@ -156,4 +156,34 @@ class ProductController extends Controller
         }
         return $images;
     }
+
+    public function search(Request $request)
+    {
+        $column = $request->input('search_type');
+        $model = 'App\\' . $this->_model;
+        switch ($column) {
+            case 'name':
+                $keyword = $request->input('name');
+
+                if ( $this->isSpaceString($keyword) === false ) {
+                    $datas = $model::where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
+                }
+                $datas->appends(['search_type'=>$_GET['search_type'], 'name' => $_GET['name']]);
+                break;
+            case 'price':
+                $keyword = $request->input('price');
+                if ($keyword == '<100000') {
+                    $datas = $model::where($column, '<', 100000)->paginate($this->_pagination);
+                } elseif ($keyword == '10000~500000') {
+                    $datas = $model::whereBetween($column, [100000, 500000])->paginate(2);
+                } elseif ($keyword == '>500000') {
+                    $datas = $model::where($column, '>', 500000)->paginate($this->_pagination);
+                }
+                $datas->appends(['search_type'=>$_GET['search_type'], 'price' => $_GET['price']]);
+                break;
+        }
+        return view('Admin.'. $this->_model .'.index')
+                ->with('datas', $datas)
+                ->with('search_message', 'About '. $datas->total() .' results');
+    }
 }
