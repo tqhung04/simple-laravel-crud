@@ -24,17 +24,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
     // User
-    Route::get('user/search', 'Admin\UserController@search');
+    Route::get('user/search', 'Admin\UserController@search')->name('user.search');
     Route::post('user/bulkAction', 'Admin\UserController@bulkAction');
     Route::resource('user', 'Admin\UserController');
 
     // Product
-    Route::get('product/search', 'Admin\ProductController@search');
+    Route::get('product/search', 'Admin\ProductController@search')->name('product.search');;
     Route::post('product/bulkAction', 'Admin\ProductController@bulkAction');
     Route::resource('product', 'Admin\ProductController');
 
     // Category
-    Route::get('category/search', 'Admin\CategoryController@search');
+    Route::get('category/search', 'Admin\CategoryController@search')->name('category.search');;
     Route::post('category/bulkAction', 'Admin\CategoryController@bulkAction');
     Route::resource('category', 'Admin\CategoryController');
 });

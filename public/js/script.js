@@ -21,7 +21,6 @@ $(function(ready){
     if (typeof(Storage) !== "undefined") {
         $search_type  = localStorage.getItem("search_type");
         if ($search_type == 'name' || $search_type == null) {
-            console.log('name');
             // Price
             $('#form_price select').attr("disabled", true);
             $('#search_price').removeAttr("checked");
@@ -46,7 +45,6 @@ $(function(ready){
             $price_type  = localStorage.getItem("price_type");
             $a = $('#form_price select option[value="'+$price_type+'"]').attr("selected", "selected");
         } else if ($search_type == 'status') {
-            console.log('status');
             // Status
             $('#search_status').attr("checked", "checked");
             $('#form_status select').removeAttr("disabled");
@@ -63,6 +61,34 @@ $(function(ready){
             $a = $('#form_status select option[value="'+$status_type+'"]').attr("selected", "selected");
         }
     }
+
+    // Sort
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    function setImageOrder($sortBy, $order) {
+        if ($order == 'asc') {
+            $('#' + $sortBy).attr('class', 'sorting_asc');
+        } else {
+            $('#' + $sortBy).attr('class', 'sorting_desc');
+        }
+    }
+
+    $sortBy = getUrlParameter('sortBy');
+    $order = getUrlParameter('order');
+    setImageOrder($sortBy, $order);
 
 });
 
@@ -115,11 +141,12 @@ function generateStatus() {
 }
 
 function setSelectedPrice() {
-    $price_type = $('#price').val();
+    $price_type = $('#price_select').val();
     localStorage.setItem("price_type", $price_type);
 }
 
 function setSelectedStatus() {
-    $status_type = $('#status').val();
+    $status_type = $('#status_select').val();
     localStorage.setItem("status_type", $status_type);
 }
+

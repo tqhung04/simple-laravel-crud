@@ -16,13 +16,17 @@ class Controller extends BaseController
     protected $_model = '';
     protected $_message = '';
     protected $_pagination = 15;
-    protected $_sortBy = '';
-    static $_order = '';
 
     public function index(Request $request)
     {
         $sortBy = (isset($request['sortBy']) ? $request['sortBy'] : 'id');
         $order = (isset($request['order']) ? $request['order'] : 'desc');
+
+        if ( $order == 'asc' ) {
+            $order = 'desc';
+        } else {
+            $order = 'asc';
+        }
 
         $model = 'App\\' . $this->_model;
 
@@ -32,10 +36,9 @@ class Controller extends BaseController
         {
             return view('errors.404');
         }
-
-        // die(var_dump($datas->total()/$this->_pagination));
-
-        return view('Admin.'. $this->_model .'.index')->with('datas', $datas);
+        return view('Admin.'. $this->_model .'.index')
+                ->with('datas', $datas)
+                ->with('order', $order);
     }
 
     public function create()
@@ -90,6 +93,15 @@ class Controller extends BaseController
 
     public function search (Request $request)
     {
+        $sortBy = (isset($request['sortBy']) ? $request['sortBy'] : 'id');
+        $order = (isset($request['order']) ? $request['order'] : 'asc');
+
+        if ( $order == 'asc' ) {
+            $order = 'desc';
+        } else {
+            $order = 'asc';
+        }
+
         $column = $request->input('search_type');
         $model = 'App\\' . $this->_model;
         switch ($column) {
@@ -97,36 +109,35 @@ class Controller extends BaseController
             case 'username':
                 $keyword = $request->input('name');
                 if ( $this->isSpaceString($keyword) === true ) {
-                    $datas = $model::where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
+                    $datas = $model::orderBy($sortBy, $order)->where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
                 } else {
                     return redirect()->back();
                 }
-                $datas->appends(['search_type'=>$_GET['search_type'], 'name' => $_GET['name']]);
                 break;
             case 'price':
                 $keyword = $request->input('price');
                 if ($keyword == '<100000') {
-                    $datas = $model::where($column, '<', 100000)->paginate($this->_pagination);
+                    $datas = $model::orderBy($sortBy, $order)->where($column, '<', 100000)->paginate($this->_pagination);
                 } elseif ($keyword == '10000~500000') {
-                    $datas = $model::whereBetween($column, [100000, 500000])->paginate($this->_pagination);
+                    $datas = $model::orderBy($sortBy, $order)->whereBetween($column, [100000, 500000])->paginate($this->_pagination);
                 } elseif ($keyword == '>500000') {
-                    $datas = $model::where($column, '>', 500000)->paginate($this->_pagination);
+                    $datas = $model::orderBy($sortBy, $order)->where($column, '>', 500000)->paginate($this->_pagination);
                 }
-                $datas->appends(['search_type'=>$_GET['search_type'], 'price' => $_GET['price']]);
                 break;
             case 'status':
                 $keyword = $request->input('status');
                 if ($keyword == 'active') {
-                    $datas = $model::where($column, '=', 0)->paginate($this->_pagination);
+                    $datas = $model::orderBy($sortBy, $order)->where($column, '=', 0)->paginate($this->_pagination);
                 } elseif ($keyword == 'deactive') {
-                    $datas = $model::where($column, '=', 1)->paginate($this->_pagination);
+                    $datas = $model::orderBy($sortBy, $order)->where($column, '=', 1)->paginate($this->_pagination);
                 }
-                $datas->appends(['search_type'=>$_GET['search_type'], 'status' => $_GET['status']]);
                 break;
         }
+        $datas->appends(array_merge($request->all()));
         return view('Admin.'. $this->_model .'.index')
                 ->with('datas', $datas)
-                ->with('search_message', 'About '. $datas->total() .' results');
+                ->with('search_message', 'About '. $datas->total() .' results')
+                ->with('order', $order);
     }
 
     public function getNameOfFileUpload ($model, $file)

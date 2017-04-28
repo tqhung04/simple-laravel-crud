@@ -20,7 +20,7 @@
                 @endif
             </div>
             <div id="form_status">
-                <select name='status' id="status" onchange="setSelectedStatus()">
+                <select name='status' id="status_select" onchange="setSelectedStatus()">
                     <option value='active'>Active</option>
                     <option value='deactive'>Deactive</option>
                 </select>
@@ -59,11 +59,40 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="table table-hover" id="myTable">
                         <tr>
                             <th><input type="checkbox" id="select_all"/></th>
-                            <th width="15%" class="sorting"><a href="{{ url('admin/user') }}">ID</a></th>
-                            <th width="35%" class="sorting" id="username" onclick="sortTable(1)">Username</th>
-                            <th width="20%" class="sorting" id="active"><a href="#">Activate</a></th>
-                            <th width="10%" class="sorting"><a href="#">Time Created</a></th>
-                            <th width="10%" class="sorting"><a href="#">Time Updated</a></th>
+                            <th width="15%" class="sorting" id="id">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('user.search', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('user.index', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
+                            @endif
+                            <th width="35%" class="sorting" id="username" onclick="sortTable(1)">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('user.search', 'Username', array_merge(Request::all(), ['sortBy'=>'username', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('user.index', 'Username', array_merge(Request::all(), ['sortBy'=>'username', 'order'=>$order])) !!}</th>
+                            @endif
+                            </th>
+                            <th width="20%" class="sorting" id="status">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('user.search', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('user.index', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
+                            @endif
+                            </a></th>
+                            <th width="10%" class="sorting" id="created_at">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('user.search', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('user.index', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
+                            @endif
+                            </a></th>
+                            <th width="10%" class="sorting" id="updated_at">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('user.search', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('user.index', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
+                            @endif
+                            </a></th>
                             <th width="10%">Action</th>
                         </tr>
                         @foreach ($datas as $indexKey => $user)
@@ -94,9 +123,7 @@
                     </div><!-- /bulk-action-->
                 {{ Form::close() }}
                 </form>
-                {{-- {{ $datas->render() }} --}}
                 {{ $datas->appends(['search'])->links() }}
-                {{-- {{ $datas->fragment('search')->links() }} --}}
                 </div>
                 @if(Session::has('flash_message'))
                      <div class="message alert alert-{!! @Session::get('flash_level') !!}">

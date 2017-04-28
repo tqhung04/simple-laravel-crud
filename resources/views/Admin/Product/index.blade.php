@@ -21,14 +21,14 @@
                 @endif
             </div>
             <div id="form_price">
-                <select name='price' id="price" onchange="setSelectedPrice()">
+                <select name='price' id="price_select" onchange="setSelectedPrice()">
                     <option value='<100000'>< 100000 VNĐ</option>
                     <option value='10000~500000'>10000~500000 VNĐ</option>
                     <option value='>500000'> > 500000 VNĐ</option>
                 </select>
             </div>
             <div id="form_status">
-                <select name='status' id="status" onchange="setSelectedStatus()">
+                <select name='status' id="status_select" onchange="setSelectedStatus()">
                     <option value='active'>Active</option>
                     <option value='deactive'>Deactive</option>
                 </select>
@@ -69,12 +69,48 @@
                         <thead>
                         <tr>
                             <th><input type="checkbox" id="select_all" name="select_all"/></th>
-                            <th width="10%" class="sorting"><a href="#">No</a></th>
-                            <th width="30%" class="sorting"><a href="#">Product Name</a></th>
-                            <th width="15%" class="sorting"><a href="#">Price</a></th>
-                            <th width="10%" class="sorting"><a href="#">Time Created</a></th>
-                            <th width="10%" class="sorting"><a href="#">Time Updated</a></th>
-                            <th width="10%" class="sorting"><a href="#">Active</a></th>
+                            <th width="10%" class="sorting" id="id">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('product.search', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('product.index', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
+                            @endif
+                            </th>
+                            <th width="30%" class="sorting" id="name">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('product.search', 'Name', array_merge(Request::all(), ['sortBy'=>'name', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('product.index', 'Name', array_merge(Request::all(), ['sortBy'=>'name', 'order'=>$order])) !!}</th>
+                            @endif
+                            </th>
+                            <th width="15%" class="sorting" id="price">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('product.search', 'Price', array_merge(Request::all(), ['sortBy'=>'price', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('product.index', 'Price', array_merge(Request::all(), ['sortBy'=>'price', 'order'=>$order])) !!}</th>
+                            @endif
+                            </th>
+                            <th width="20%" class="sorting" id="status">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('product.search', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('product.index', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
+                            @endif
+                            </a></th>
+                            <th width="10%" class="sorting" id="created_at">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('product.search', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('product.index', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
+                            @endif
+                            </a></th>
+                            <th width="10%" class="sorting" id="updated_at">
+                            @if(isset($_GET['search_type']))
+                                {!! link_to_route('product.search', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
+                            @else
+                                {!! link_to_route('product.index', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
+                            @endif
+                            </a></th>
                             <th width="10%">Action</th>
                         </tr>
                         </thead>
@@ -85,13 +121,13 @@
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->price }} VNĐ</td>
-                            <td>{{ $product->created_at }}</td>
-                            <td>{{ $product->updated_at }}</td>
                             @if( $product->status == 0 )
                                 <td><span class="text-success">Actived</span></td>
                             @else
                                 <td><span class="text-error">Deactived</span></td>
                             @endif
+                            <td>{{ $product->created_at }}</td>
+                            <td>{{ $product->updated_at }}</td>
                             <td><a href="{{ url('admin/product/' . $product->id . '/edit') }}" class="btn btn-info">Edit</a></td>
                         </tr>
                         @endforeach
