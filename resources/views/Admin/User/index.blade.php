@@ -9,11 +9,23 @@
 @section('search')
     {{ Form::open(array('url' => 'admin/user/search', 'method' => 'get')) }}
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-        @if( isset($_GET['search']) )
-            {!! Form::text('search', $_GET['search'], array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
-        @else
-            {!! Form::text('search', null, array('required', 'class'=>'span11', 'placeholder'=>'Search for a user...')) !!}
-        @endif
+        <input type="radio" id="search_name" name="search_type" value="username" checked="checked" onclick="generateName()"> Name
+        <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
+        <div id="form_generate">
+            <div id="form_name">
+                @if( isset($_GET['name']) )
+                    {!! Form::text('name', $_GET['name'], array('required', 'class'=>'span11', 'placeholder'=>'Search by name of user...')) !!}
+                @else
+                    {!! Form::text('name', null, array('required', 'class'=>'span11', 'placeholder'=>'Search by name of user...')) !!}
+                @endif
+            </div>
+            <div id="form_status">
+                <select name='status' id="status" onchange="setSelectedStatus()">
+                    <option value='active'>Active</option>
+                    <option value='deactive'>Deactive</option>
+                </select>
+            </div>
+        </div>
         {!! Form::submit('Search', array('class'=>'btn btn-default')) !!}
     {{ Form::close() }}
 @stop
@@ -35,7 +47,7 @@
                         </div>
                         <div class="span9" style="text-align: left; padding-top: 15px">
                             @if(isset($search_message))
-                                 <span class="">
+                                 <span class="search_message">
                                     ___{{ $search_message }}___
                                 </span>
                             @endif

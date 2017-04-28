@@ -90,35 +90,43 @@ class Controller extends BaseController
 
     public function search (Request $request)
     {
-        $this->validate($request, [
-            'search' => 'required',
-        ]);
-        switch ($this->_model) {
-            case 'User':
-                $column = 'username';
+        $column = $request->input('search_type');
+        $model = 'App\\' . $this->_model;
+        switch ($column) {
+            case 'name':
+            case 'username':
+                $keyword = $request->input('name');
+                if ( $this->isSpaceString($keyword) === true ) {
+                    $datas = $model::where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
+                } else {
+                    return redirect()->back();
+                }
+                $datas->appends(['search_type'=>$_GET['search_type'], 'name' => $_GET['name']]);
                 break;
-            case 'Product':
-                $column = 'name';
+            case 'price':
+                $keyword = $request->input('price');
+                if ($keyword == '<100000') {
+                    $datas = $model::where($column, '<', 100000)->paginate($this->_pagination);
+                } elseif ($keyword == '10000~500000') {
+                    $datas = $model::whereBetween($column, [100000, 500000])->paginate($this->_pagination);
+                } elseif ($keyword == '>500000') {
+                    $datas = $model::where($column, '>', 500000)->paginate($this->_pagination);
+                }
+                $datas->appends(['search_type'=>$_GET['search_type'], 'price' => $_GET['price']]);
                 break;
-            case 'Product':
-                $column = 'name';
-                break;
-            default:
-                $column = 'name';
+            case 'status':
+                $keyword = $request->input('status');
+                if ($keyword == 'active') {
+                    $datas = $model::where($column, '=', 0)->paginate($this->_pagination);
+                } elseif ($keyword == 'deactive') {
+                    $datas = $model::where($column, '=', 1)->paginate($this->_pagination);
+                }
+                $datas->appends(['search_type'=>$_GET['search_type'], 'status' => $_GET['status']]);
                 break;
         }
-        $keyword = $request->input('search');
-
-        if ( $this->isSpaceString($keyword) === false ) {
-            $model = 'App\\' . $this->_model;
-            $datas = $model::where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
-            // $datas->appends(Request::only('search'))->links();
-            $datas->appends(['search' => $_GET['search']]);
-            // die(var_dump(count($datas)));
-            return view('Admin.'. $this->_model .'.index')
-                    ->with('datas', $datas)
-                    ->with('search_message', 'About '. $datas->total() .' results');
-        }
+        return view('Admin.'. $this->_model .'.index')
+                ->with('datas', $datas)
+                ->with('search_message', 'About '. $datas->total() .' results');
     }
 
     public function getNameOfFileUpload ($model, $file)
@@ -168,7 +176,7 @@ class Controller extends BaseController
     }
 
     public function isSpaceString ($string) {
-        if ( ctype_space($string) )
+        if ( $string )
         {
             return true;
         }
