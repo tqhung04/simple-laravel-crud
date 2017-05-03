@@ -23,7 +23,6 @@ class ProductImages extends Authenticatable
     {
         $result = DB::table('product_images')->select('name')->where('products_id', '=', $productId)->get();
         $images = json_decode(json_encode($result), true);
-        // die(var_dump($images));
         if ($images) {
 	        return $images;
         } else {

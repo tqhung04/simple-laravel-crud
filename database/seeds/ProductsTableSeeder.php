@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use App\Product;
 
 class ProductsTableSeeder extends DatabaseSeeder
 {
@@ -25,7 +26,7 @@ class ProductsTableSeeder extends DatabaseSeeder
                 'categories_id' => 2,
                 'status' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s")
             ];
         }
 

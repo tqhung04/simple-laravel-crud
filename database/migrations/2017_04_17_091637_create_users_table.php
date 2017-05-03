@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 225);
             $table->string('image')->nullable();
             $table->tinyInteger('status');
+            $table->integer('roles_id')->default(1);
             $table->string('remember_token')->nullable();
             $table->timestamps();
         });

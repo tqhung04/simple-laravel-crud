@@ -23,6 +23,7 @@ class UsersTableSeeder extends DatabaseSeeder
                 'password' => bcrypt('12345678'),
                 'image' => 'default.jpg',
                 'status' => 0,
+                'roles_id' => 1,
                 'remember_token' => '',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
@@ -38,6 +39,7 @@ class UsersTableSeeder extends DatabaseSeeder
                 'password' => bcrypt('12345678'),
                 'image' => 'default.jpg',
                 'status' => 0,
+                'roles_id' => 2,
                 'remember_token' => '',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
