@@ -16,7 +16,7 @@ class Controller extends BaseController
 {
     protected $_model = '';
     protected $_message = '';
-    protected $_pagination = 15;
+    protected $_pagination = 2;
 
     public function index(Request $request)
     {

@@ -1,7 +1,7 @@
 <div class="dataTables_paginate">
     @if ($paginator->onFirstPage())
-        <a class="first paginate_button paginate_button_disabled" href="">First</a>
-        <a class="previous paginate_button paginate_button_disabled" href="">Previous</a>
+        <a class="first paginate_button paginate_button_disabled">First</a>
+        <a class="previous paginate_button paginate_button_disabled">Previous</a>
     @else
         <a class="first paginate_button" href="{{ $paginator->url(1) }}">First</a>
         <a class="previous paginate_button" href="{{$paginator->previousPageUrl()}}">Previous</a>
@@ -23,7 +23,7 @@
     @endif
 @else
     @if($paginator->currentPage() - 3 > 0 && ($paginator->currentPage()+2) < $paginator->lastPage())
-        <a class="paginate_button">...</a>
+        <a class="paginate_button paginate_button_disabled">...</a>
         @for($i = $paginator->currentPage() - 2; $i <= $paginator->currentPage() + 2; $i++)
             <span>
             @if ($i == $paginator->currentPage())
@@ -33,7 +33,7 @@
             @endif
             </span>
         @endfor
-        <a class="paginate_button">...</a>
+        <a class="paginate_button paginate_button_disabled">...</a>
     @elseif($paginator->currentPage() - 3 <= 0)
             @for($i = 1; $i <= $paginator->currentPage() + 2; $i++)
                 <span>
@@ -44,9 +44,9 @@
                 @endif
                 </span>
             @endfor
-        <a class="paginate_button">...</a>
+        <a class="paginate_button paginate_button_disabled">...</a>
     @elseif($paginator->currentPage() >= $paginator->lastPage()-3)
-        <a class="paginate_button" disbale>...</a>
+        <a class="paginate_button paginate_button_disabled">...</a>
         @for($i = $paginator->currentPage() - 2; $i <= $paginator->lastPage(); $i++)
             <span>
             @if ($i == $paginator->currentPage())
@@ -60,9 +60,9 @@
 @endif
 
 @if ($paginator->total() != 0)
-    @if ($paginator->currentPage() == count($elements[0]))
-        <a class="next paginate_button paginate_button_disabled" href="">Next</a>
-        <a class="last paginate_button paginate_button_disabled" href="">Last</a>
+    @if ($paginator->currentPage() == $paginator->lastPage())
+        <a class="next paginate_button paginate_button_disabled">Next</a>
+        <a class="last paginate_button paginate_button_disabled">Last</a>
     @else
         <a class="next paginate_button" href="{{$paginator->nextPageUrl()}}">Next</a>
         <a class="last paginate_button" href="{{$paginator->url($paginator->lastPage()) }}">Last</a>

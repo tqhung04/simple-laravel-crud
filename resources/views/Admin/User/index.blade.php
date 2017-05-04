@@ -107,13 +107,7 @@
                             @endif
                             <td>{{ $user->created_at }}</td>
                             <td>{{ $user->updated_at }}</td>
-                            <td>
-                                @if( Auth::user()->id == $user->id )
-                                    <a href="{{ url('admin/user/' . $user->id . '/edit') }}" class="btn btn-info">Edit</a>
-                                @elseif( Auth::user()->id == 1 )
-                                    <a href="{{ url('admin/user/' . $user->id . '/edit') }}" class="btn btn-info">Edit</a>
-                                @endif
-                            </td>
+                            <td><a href="{{ url('admin/user/' . $user->id . '/edit') }}" class="btn btn-info">Edit</a></td>
                         </tr>
                         @endforeach
                     </table>
