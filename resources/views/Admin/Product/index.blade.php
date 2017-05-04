@@ -137,16 +137,16 @@
                     <div class="bulk-action">
                         <input class="btn btn-success" type="submit" name="active" value="Active">
                         <input class="btn btn-danger" type="submit" name="deactive" value="Deactive">
+                        @if(Session::has('flash_message'))
+                             <div class="message alert alert-{!! @Session::get('flash_level') !!}">
+                                {!! @Session::get('flash_message') !!}
+                            </div>
+                        @endif
                     </div>
                 {{ Form::close() }}
                 </form>
                     {{ $datas->render() }}
                 </div>
-                    @if(Session::has('flash_message'))
-                        <div class="message alert alert-{!! @Session::get('flash_level') !!}">
-                            {!! @Session::get('flash_message') !!}
-                        </div>
-                    @endif
                 <div class="clear"></div>
             </div>
 

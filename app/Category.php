@@ -4,7 +4,9 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use DB;
+use App\User;
 
 class Category extends Authenticatable
 {
@@ -18,6 +20,11 @@ class Category extends Authenticatable
     protected $fillable = [
         'id', 'name'
     ];
+
+    public function saveCategory ($category)
+    {
+        $category->save();
+    }
 
     public function getActiveCategories()
     {
@@ -55,6 +62,25 @@ class Category extends Authenticatable
                 ])->get();
 
         if ( count($category) == 0 ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function getData() {
+        $currentUserId = Auth::user()->id;
+        $categories = DB::table('categories')->where('users_id', '=', $currentUserId);
+        return $categories;
+    }
+
+    public function checkCreater($categoryId) {
+        $currentUserId = Auth::user()->id;
+        $product = DB::table('categories')
+                        ->where('id', '=', $categoryId)
+                        ->where('users_id', '=', $currentUserId)
+                        ->get();
+        if ( count($product) == 0 ) {
             return false;
         } else {
             return true;

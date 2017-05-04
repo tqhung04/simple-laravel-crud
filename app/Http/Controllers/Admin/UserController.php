@@ -63,5 +63,25 @@ class UserController extends Controller
 
         return redirect()->action('Admin\UserController@index')->with(['flash_level'=>'success','flash_message' => 'Update User Success']);
     }
+
+    public function edit($id)
+    {
+        $currentUserid = Auth::id();
+        $user = new User();
+        $isAdmin = $user->isAdmin($currentUserid);
+
+        $data = $this->getObjectById($id);
+
+        if ( $data ) {
+            if ( $id == $currentUserid || $isAdmin == true ) {
+                return view('Admin.'. $this->_model .'.create_update')
+                    ->with('data', $data);
+            } else {
+                return view('errors.permission');
+            }
+        } else {
+            return view('errors.404');
+        }
+    }
 }
 

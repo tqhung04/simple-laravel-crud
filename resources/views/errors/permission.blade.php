@@ -15,10 +15,7 @@
                         <h1>
                             Oops!</h1>
                         <h2>
-                            You don't have permission to edit this account</h2>
-                        <div class="error-details">
-                            Click <a href="{{ url('admin/user/'. Auth::user()->id .'/edit') }}">here</a> if you want to edit your account
-                        </div>
+                            You don't have permission to edit this</h2>
                         <div class="error-actions">
                             <a href="{{ url('admin') }}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
                                 Take Me Home </a><a href="http://www.jquery2dotnet.com" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-envelope"></span> Contact Support </a>

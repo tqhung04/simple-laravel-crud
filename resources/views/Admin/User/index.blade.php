@@ -120,10 +120,9 @@
                     <div class="bulk-action">
                         <input class="btn btn-success" type="submit" name="active" value="Active">
                         <input class="btn btn-danger" type="submit" name="deactive" value="Deactive">
-                        @if (session('bulk_error'))
-                            <div class="alert alert-danger" id="danger-alert">
-                                <button type="button" class="close" data-dismiss="alert">x</button>
-                                <strong>No row selected</strong>
+                        @if(Session::has('flash_message'))
+                             <div class="message alert alert-{!! @Session::get('flash_level') !!}">
+                                {!! @Session::get('flash_message') !!}
                             </div>
                         @endif
                     </div><!-- /bulk-action-->
@@ -131,11 +130,6 @@
                 </form>
                 {{ $datas->appends(['search'])->links() }}
                 </div>
-                @if(Session::has('flash_message'))
-                     <div class="message alert alert-{!! @Session::get('flash_level') !!}">
-                        {!! @Session::get('flash_message') !!}
-                    </div>
-                @endif
                 <div class="clear"></div>
             </div>
         </div>

@@ -19,16 +19,34 @@ class CategoryController extends Controller
         'status.error' => 'This category has product'
     ];
 
+    public function edit($id)
+    {
+        $category = Category::find($id);
+
+        if ( $category ) {
+            $checkCreater = $category->checkCreater($id);
+            if ( $checkCreater ) {
+                return view('Admin.Category.create_update')
+                        ->with('data', $category);
+            } else {
+                return view('errors.permission');
+            }
+        } else {
+            return view('errors.404');
+        }
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|unique:categories',
         ]);
 
-        $user = new Category;
-        $user->name = Input::get('name');
-        $user->status = Input::get('status');
-        $user->save();
+        $category = new Category;
+        $category->name = Input::get('name');
+        $category->status = Input::get('status');
+        $category->users_id = Auth::user()->id;
+        $category->saveCategory($category);
 
         return redirect()->action('Admin\CategoryController@index')->with(['flash_level'=>'success','flash_message' => 'Create Category Success']);
     }
@@ -52,7 +70,7 @@ class CategoryController extends Controller
             }
         }
 
-        $category->save();
+        $category->saveCategory($category);
 
         return redirect()->action('Admin\CategoryController@index');
     }

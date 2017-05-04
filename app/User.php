@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use DB;
+use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class User extends Authenticatable
 {
@@ -37,5 +39,16 @@ class User extends Authenticatable
         } else {
             return true;
         }
+    }
+
+    public function getData() {
+        $currentUserId = Auth::user()->id;
+
+        if ( $currentUserId == 1 ) {
+            $users = DB::table('users');
+        } else {
+            $users = DB::table('users')->where('id', '=', $currentUserId);
+        }
+        return $users;
     }
 }

@@ -43,6 +43,7 @@ class ProductController extends Controller
         $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
+        $product->users_id = Auth::user()->id;
 
         $category = new Category();
         $checkActiveCategoryById = $category->checkActiveCategoryById($product->categories_id);
@@ -64,24 +65,26 @@ class ProductController extends Controller
         if ( $product ) {
             // Get Images of Product
             $images = $this->getImagesOfProduct($id);
-            
 
-            $product = Product::find($id);
+            $checkCreater = $product->checkCreater($id);
+            if ( $checkCreater ) {
+                $categories = Category::get()->where('status', '=', '0');
+                $current_category[$product->categories_id] = Category::get()->where('id', '=', $product->categories_id);
+                $categoryList = [];
 
-            $categories = Category::get()->where('status', '=', '0');
-            $current_category[$product->categories_id] = Category::get()->where('id', '=', $product->categories_id);
-            $categoryList = [];
+                foreach ($categories as $category) {
+                    $category = Category::where('name' , '=', $category['name'])->first();
+                    $categoryList[$category['id']] = $category['name'];
+                }
 
-            foreach ($categories as $category) {
-                $category = Category::where('name' , '=', $category['name'])->first();
-                $categoryList[$category['id']] = $category['name'];
+                return view('Admin.Product.create_update')
+                    ->with('images', $images)
+                    ->with('active_categories', $categoryList)
+                    ->with('current_category', $current_category[$product->categories_id])
+                    ->with('product', $product);
+            } else {
+                return view('errors.permission');
             }
-
-            return view('Admin.Product.create_update')
-                ->with('images', $images)
-                ->with('active_categories', $categoryList)
-                ->with('current_category', $current_category[$product->categories_id])
-                ->with('product', $product);
         } else {
             return view('errors.404');
         }

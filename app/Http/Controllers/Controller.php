@@ -31,7 +31,20 @@ class Controller extends BaseController
 
         $model = 'App\\' . $this->_model;
 
-        $datas = $model::orderBy($sortBy, $order)->paginate($this->_pagination);
+        switch ($this->_model) {
+            case 'Product':
+                $product = new Product();
+                $datas = $product->getData()->orderBy($sortBy, $order)->paginate($this->_pagination);
+                break;
+            case 'Category':
+                $category = new Category();
+                $datas = $category->getData()->orderBy($sortBy, $order)->paginate($this->_pagination);
+                break;
+            default:
+                $user = new User();
+                $datas = $user->getData()->orderBy($sortBy, $order)->paginate($this->_pagination);
+                break;
+        }
 
         if ( isset($_GET['page']) && $_GET['page'] > $datas->total()/$this->_pagination + 1)
         {
@@ -49,12 +62,9 @@ class Controller extends BaseController
 
     public function edit($id)
     {
-
         $currentUserid = Auth::id();
-        // die(var_dump($currentUserid));
         $user = new User();
         $isAdmin = $user->isAdmin($currentUserid);
-        // die(var_dump($isAdmin));
 
         $data = $this->getObjectById($id);
 
@@ -97,11 +107,10 @@ class Controller extends BaseController
                 }
                 $data->save();
             }
-            // return redirect()->action('Admin\\'. $this->_model .'Controller@index');
             return redirect()->back();
         }
         else {
-            return redirect()->back()->with('bulk_error', 'Bulk action error');
+            return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'No row selected']);
         }
     }
 
@@ -118,12 +127,14 @@ class Controller extends BaseController
 
         $column = $request->input('search_type');
         $model = 'App\\' . $this->_model;
+        $model = new $model();
+
         switch ($column) {
             case 'name':
             case 'username':
                 $keyword = $request->input('name');
                 if ( $this->isSpaceString($keyword) === true ) {
-                    $datas = $model::orderBy($sortBy, $order)->where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
+                    $datas = $model->getData()->orderBy($sortBy, $order)->where($column, "LIKE", "%$keyword%")->paginate($this->_pagination);
                 } else {
                     return redirect()->back();
                 }
@@ -131,19 +142,19 @@ class Controller extends BaseController
             case 'price':
                 $keyword = $request->input('price');
                 if ($keyword == '<100000') {
-                    $datas = $model::orderBy($sortBy, $order)->where($column, '<', 100000)->paginate($this->_pagination);
+                    $datas = $model->getData()->orderBy($sortBy, $order)->where($column, '<', 100000)->paginate($this->_pagination);
                 } elseif ($keyword == '10000~500000') {
-                    $datas = $model::orderBy($sortBy, $order)->whereBetween($column, [100000, 500000])->paginate($this->_pagination);
+                    $datas = $model->getData()->orderBy($sortBy, $order)->whereBetween($column, [100000, 500000])->paginate($this->_pagination);
                 } elseif ($keyword == '>500000') {
-                    $datas = $model::orderBy($sortBy, $order)->where($column, '>', 500000)->paginate($this->_pagination);
+                    $datas = $model->getData()->orderBy($sortBy, $order)->where($column, '>', 500000)->paginate($this->_pagination);
                 }
                 break;
             case 'status':
                 $keyword = $request->input('status');
                 if ($keyword == 'active') {
-                    $datas = $model::orderBy($sortBy, $order)->where($column, '=', 0)->paginate($this->_pagination);
+                    $datas = $model->getData()->orderBy($sortBy, $order)->where($column, '=', 0)->paginate($this->_pagination);
                 } elseif ($keyword == 'deactive') {
-                    $datas = $model::orderBy($sortBy, $order)->where($column, '=', 1)->paginate($this->_pagination);
+                    $datas = $model->getData()->orderBy($sortBy, $order)->where($column, '=', 1)->paginate($this->_pagination);
                 }
                 break;
         }

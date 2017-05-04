@@ -4,7 +4,9 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use DB;
+use App\User;
 
 class Product extends Authenticatable
 {
@@ -26,5 +28,25 @@ class Product extends Authenticatable
     public function getTheHighestId() {
         $product = DB::table('products')->max('id');
         return $product;
+    }
+
+    public function getData() {
+        $currentUserId = Auth::user()->id;
+        $product = DB::table('products')
+                        ->where('users_id', '=', $currentUserId);
+        return $product;
+    }
+
+    public function checkCreater($productId) {
+        $currentUserId = Auth::user()->id;
+        $product = DB::table('products')
+                        ->where('id', '=', $productId)
+                        ->where('users_id', '=', $currentUserId)
+                        ->get();
+        if ( count($product) == 0 ) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
