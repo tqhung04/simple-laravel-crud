@@ -62,7 +62,7 @@
                         @endif
                     </div>
                 </div>
-                {{ Form::open(array('url' => 'admin/product/action', 'method' => 'POST' )) }}
+                {{ Form::open(array('url' => 'admin/product/bulkAction', 'method' => 'POST' )) }}
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <table cellpadding="0" cellspacing="0" width="100%" class="table" id="tSortable_2">

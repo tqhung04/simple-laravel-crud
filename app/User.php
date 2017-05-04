@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use DB;
 
 class User extends Authenticatable
 {
@@ -26,4 +27,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function isAdmin ($userId) {
+        $user = DB::table('users')
+                    ->where('id', '=', $userId)
+                    ->where('roles_id', '=', '1')->get();
+        if ( count($user) == 0 ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

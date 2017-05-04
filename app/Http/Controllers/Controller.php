@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\User;
 use App\Category;
@@ -48,10 +49,22 @@ class Controller extends BaseController
 
     public function edit($id)
     {
+
+        $currentUserid = Auth::id();
+        // die(var_dump($currentUserid));
+        $user = new User();
+        $isAdmin = $user->isAdmin($currentUserid);
+        // die(var_dump($isAdmin));
+
         $data = $this->getObjectById($id);
 
         if ( $data ) {
-            return view('Admin.'. $this->_model .'.create_update')->with('data', $data);
+            if ( $id == $currentUserid || $isAdmin == true ) {
+                return view('Admin.'. $this->_model .'.create_update')
+                    ->with('data', $data);
+            } else {
+                return view('errors.permission');
+            }
         } else {
             return view('errors.404');
         }
@@ -84,10 +97,11 @@ class Controller extends BaseController
                 }
                 $data->save();
             }
-            return redirect()->action('Admin\\'. $this->_model .'Controller@index');
+            // return redirect()->action('Admin\\'. $this->_model .'Controller@index');
+            return redirect()->back();
         }
         else {
-            return redirect()   ->back()->with('bulk_error', 'Ahihi');
+            return redirect()->back()->with('bulk_error', 'Bulk action error');
         }
     }
 
@@ -186,7 +200,8 @@ class Controller extends BaseController
         }
     }
 
-    public function isSpaceString ($string) {
+    public function isSpaceString ($string)
+    {
         if ( $string )
         {
             return true;
@@ -197,7 +212,8 @@ class Controller extends BaseController
         }
     }
 
-    public function getObjectById($id) {
+    public function getObjectById($id)
+    {
         $model = 'App\\' . $this->_model;
         $data = $model::find($id);
 

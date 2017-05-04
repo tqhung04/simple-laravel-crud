@@ -57,7 +57,7 @@
                         <div class="row-form">
                             <div class="span3">Password:</div>
                             <div class="span9">
-                                <input type="password" name="password" placeholder="some text value" value="{{ old('email') }}" required="true"/>
+                                <input type="password" name="password" placeholder="some text value" required="true"/>
                                 @if( $errors->first('password') )
                                     <div class = "alert alert-danger">
                                         {!! $errors->first('password') !!}
