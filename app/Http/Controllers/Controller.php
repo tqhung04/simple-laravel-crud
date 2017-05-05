@@ -101,13 +101,13 @@ class Controller extends BaseController
                         $haveProducts = $category->haveProducts($id);
                         if ( $haveProducts ) {
                             $data->status = 0;
-                            return redirect()->back()->with('status_error', 'This category had product');
+                            return redirect()->back()->with(['flash_level'=>'error','flash_message' => $data->name . ' had product']);
                         }
                     }
                 }
-                $data->save();
             }
-            return redirect()->back();
+            $data->save();
+            return redirect()->back()->with(['flash_level'=>'success','flash_message' => ' Bulk action success!']);
         }
         else {
             return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'No row selected']);
