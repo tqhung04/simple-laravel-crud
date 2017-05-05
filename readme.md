@@ -17,7 +17,7 @@
 <h4>6. Tạo database theo như file .env</h4>
 <h4>7. Generate key: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan key:generate</b></h4>
 <h4>8. Clear cache: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan config:clear</b></h4>
-<h4>9. Dumbload: <b style="color: #f4645f; padding: 5px; background: bisque;"> composer dumpautoload</b></h4>
+<h4>9. Dumpautoload: <b style="color: #f4645f; padding: 5px; background: bisque;"> composer dumpautoload</b></h4>
 <h4>10. Create tables & insert default data: <b style="color: #f4645f; padding: 5px; background: bisque;"> php artisan migrate --seed</b></h4>
 <h4>11. Khởi chạy serve: <b style="color: #f4645f; padding: 5px; background: bisque;">php artisan serve</b></h4>
 <h4>12. Kết nối tới : http://127.0.0.1:8000/admin</h4>
