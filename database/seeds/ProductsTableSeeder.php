@@ -13,7 +13,7 @@ class ProductsTableSeeder extends DatabaseSeeder
      */
     public function run()
     {
-        DB::table('categories')->delete();
+        DB::table('products')->delete();
         $products = [];
 
         for($i = 1; $i<25; $i++) {
