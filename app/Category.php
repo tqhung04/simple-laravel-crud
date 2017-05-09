@@ -70,7 +70,12 @@ class Category extends Authenticatable
 
     public function getData() {
         $currentUserId = Auth::user()->id;
-        $categories = DB::table('categories')->where('users_id', '=', $currentUserId);
+        $currentRoleId = Auth::user()->roles_id;
+        if ( $currentRoleId == 1 ) {
+            $categories = DB::table('categories');
+        } else {
+            $categories = DB::table('categories')->where('users_id', '=', $currentUserId);
+        }
         return $categories;
     }
 

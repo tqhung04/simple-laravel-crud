@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use App\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
@@ -18,12 +19,35 @@ class UserController extends Controller
 
     protected $_model = 'User';
 
+    public function create()
+    {
+        $currentUserid = Auth::id();
+        $user = new User();
+        $isAdmin = $user->isAdmin($currentUserid);
+
+        $roles_model = new Role();
+        $roles = $roles_model->getData();
+        $roleList = [];
+        foreach ($roles as $role) {
+            $roleList[$role->id] = $role->name;
+        }
+
+        if ( $isAdmin == true ) {
+            return view('Admin.'. $this->_model .'.create_update')
+                    ->with('roleList', $roleList)
+                    ->with('isAdmin', $isAdmin);
+        } else {
+            return view('errors.permission');
+        }
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [
             'username' => 'required|unique:users',
             'password' => 'required|min:8',
             'email' => 'required|email|unique:users',
+            'role' => 'required',
         ]);
 
         $file = Input::file('image');
@@ -33,6 +57,7 @@ class UserController extends Controller
         $user->email = Input::get('email');
         $user->password = Hash::make(Input::get('password'));
         $user->status = Input::get('status');
+        $user->roles_id = Input::get('role');
         $user->image = $this->getNameOfFileUpload($user, $file);
         $user->save();
 
@@ -45,18 +70,30 @@ class UserController extends Controller
 
         $this->validate($request, [
             'username' => 'required|unique:users,username,'. $id,
-            'password' => 'required|min:8',
             'email' => 'required|email|unique:users,email,' . $id,
         ]);
 
         $file = Input::file('image');
+        $password = $request->input('password');
+        $role = $request->input('role');
 
         $user = User::find($id);
         $user->image = $this->getNameOfFileUpload($user, $file);
         $user->username = Input::get('username');
         $user->email = Input::get('email');
-        $user->password = Hash::make(Input::get('password'));
         $user->status = Input::get('status');
+
+        if ( $role ) {
+            $user->roles_id = Input::get('role');;
+        }
+
+        if( $password ) {
+            $this->validate($request, [
+                'password' => 'min:8',
+            ]);
+            $user->password = Hash::make(Input::get('password'));
+        }
+
         $user->save();
 
         $this->handleFileUpload($file, $user->image);
@@ -66,16 +103,30 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        // Check admin
         $currentUserid = Auth::id();
         $user = new User();
         $isAdmin = $user->isAdmin($currentUserid);
+
+        // Get Role
+        $user = User::find($id);
+        $roles_model = new Role();
+        $current_role[$user->roles_id] = $roles_model->getNameById($user->roles_id);
+        $roles = $roles_model->getData();
+        $roleList = [];
+        foreach ($roles as $role) {
+            $roleList[$role->id] = $role->name;
+        }
 
         $data = $this->getObjectById($id);
 
         if ( $data ) {
             if ( $id == $currentUserid || $isAdmin == true ) {
                 return view('Admin.'. $this->_model .'.create_update')
-                    ->with('data', $data);
+                    ->with('data', $data)
+                    ->with('isAdmin', $isAdmin)
+                    ->with('current_role', $current_role[$user->roles_id])
+                    ->with('roleList', $roleList);
             } else {
                 return view('errors.permission');
             }

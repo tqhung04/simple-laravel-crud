@@ -69,36 +69,36 @@
                             <th><input type="checkbox" id="select_all"/></th>
                             <th width="15%" class="sorting" id="id">
                             @if(isset($_GET['search_type']))
-                                {!! link_to_route('user.search', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.search', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
                             @else
-                                {!! link_to_route('user.index', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.index', 'ID', array_merge(Request::all(), ['sortBy'=>'id', 'order'=>$order])) !!}</th>
                             @endif
                             <th width="35%" class="sorting" id="name">
                             @if(isset($_GET['search_type']))
-                                {!! link_to_route('user.search', 'Name', array_merge(Request::all(), ['sortBy'=>'name', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.search', 'Name', array_merge(Request::all(), ['sortBy'=>'name', 'order'=>$order])) !!}</th>
                             @else
-                                {!! link_to_route('user.index', 'Name', array_merge(Request::all(), ['sortBy'=>'name', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.index', 'Name', array_merge(Request::all(), ['sortBy'=>'name', 'order'=>$order])) !!}</th>
                             @endif
                             </th>
                             <th width="20%" class="sorting" id="status">
                             @if(isset($_GET['search_type']))
-                                {!! link_to_route('user.search', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.search', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
                             @else
-                                {!! link_to_route('user.index', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.index', 'Status', array_merge(Request::all(), ['sortBy'=>'status', 'order'=>$order])) !!}</th>
                             @endif
                             </th>
                             <th width="10%" class="sorting" id="created_at">
                             @if(isset($_GET['search_type']))
-                                {!! link_to_route('user.search', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.search', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
                             @else
-                                {!! link_to_route('user.index', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.index', 'Time Created', array_merge(Request::all(), ['sortBy'=>'created_at', 'order'=>$order])) !!}</th>
                             @endif
                             </a></th>
                             <th width="10%" class="sorting" id="updated_at">
                             @if(isset($_GET['search_type']))
-                                {!! link_to_route('user.search', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.search', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
                             @else
-                                {!! link_to_route('user.index', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
+                                {!! link_to_route('category.index', 'Time Updated', array_merge(Request::all(), ['sortBy'=>'updated_at', 'order'=>$order])) !!}</th>
                             @endif
                             </a></th>
                             <th width="10%">Action</th>

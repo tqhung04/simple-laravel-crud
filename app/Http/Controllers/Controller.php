@@ -50,9 +50,16 @@ class Controller extends BaseController
         {
             return view('errors.404');
         }
+
+        // Check admin
+        $currentUserid = Auth::id();
+        $user = new User();
+        $isAdmin = $user->isAdmin($currentUserid);
+
         return view('Admin.'. $this->_model .'.index')
                 ->with('datas', $datas)
-                ->with('order', $order);
+                ->with('order', $order)
+                ->with('isAdmin', $isAdmin);
     }
 
     public function create()

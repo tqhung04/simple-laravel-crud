@@ -32,8 +32,12 @@ class Product extends Authenticatable
 
     public function getData() {
         $currentUserId = Auth::user()->id;
-        $product = DB::table('products')
-                        ->where('users_id', '=', $currentUserId);
+        $currentRoleId = Auth::user()->roles_id;
+        if ( $currentRoleId == 1 ) {
+            $product = DB::table('products');
+        } else {
+            $product = DB::table('products')->where('users_id', '=', $currentUserId);
+        }
         return $product;
     }
 

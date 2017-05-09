@@ -42,9 +42,11 @@
 
             <div class="block-fluid table-sorting">
                     <div class="row-fluid">
-                        <div class="span3">
-                            <a href="{{ url('admin/user/create') }}" class="btn btn-add">Add User</a>
-                        </div>
+                        @if( $isAdmin == 1 )
+                            <div class="span3">
+                                <a href="{{ url('admin/user/create') }}" class="btn btn-add">Add User</a>
+                            </div>
+                        @endif
                         <div class="span9" style="text-align: left; padding-top: 15px">
                             @if(isset($search_message))
                                  <span class="search_message">

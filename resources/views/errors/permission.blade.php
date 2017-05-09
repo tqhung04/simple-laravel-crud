@@ -15,7 +15,7 @@
                         <h1>
                             Oops!</h1>
                         <h2>
-                            You don't have permission to edit this</h2>
+                            You don't have permission ☠☹⛔</h2>
                         <div class="error-actions">
                             <a href="{{ url('admin') }}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
                                 Take Me Home </a><a href="http://www.jquery2dotnet.com" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-envelope"></span> Contact Support </a>

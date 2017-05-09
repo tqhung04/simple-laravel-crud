@@ -42,9 +42,10 @@ class User extends Authenticatable
     }
 
     public function getData() {
+        $currentUserRoleId = Auth::user()->roles_id;
         $currentUserId = Auth::user()->id;
 
-        if ( $currentUserId == 1 ) {
+        if ( $currentUserRoleId == 1 ) {
             $users = DB::table('users');
         } else {
             $users = DB::table('users')->where('id', '=', $currentUserId);

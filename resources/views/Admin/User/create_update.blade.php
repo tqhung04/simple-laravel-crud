@@ -57,7 +57,7 @@
                         <div class="row-form">
                             <div class="span3">Password:</div>
                             <div class="span9">
-                                <input type="password" name="password" placeholder="some text value" required="true"/>
+                                <input type="password" name="password" placeholder="some text value"/>
                                 @if( $errors->first('password') )
                                     <div class = "alert alert-danger">
                                         {!! $errors->first('password') !!}
@@ -77,7 +77,25 @@
                                 {{ Form::file('image', null) }}
                             </div>
                             <div class="clear"></div>
-                        </div> 
+                        </div>
+                        @if( $isAdmin == 1 )
+                            <div class="row-form">
+                                <div class="span3">Role:</div>
+                                <div class="span9">
+                                    <select name="role" required="true">
+                                        @if (isset($current_role))
+                                            @foreach($current_role as $key => $role)
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
+                                        @endif
+                                        @foreach($roleList as $key => $role)
+                                            <option value="{{ $key }}">{{ $role }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        @endif
                         <div class="row-form">
                             <div class="span3">Activate:</div>
                             <div class="span9">
