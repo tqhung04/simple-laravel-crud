@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Collective\Html\HtmlFacade;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Storage;
 use Hash;
-use DB; 
+use DB;
+use File;
 
 class UserController extends Controller
 {
@@ -78,10 +80,11 @@ class UserController extends Controller
         $role = $request->input('role');
 
         $user = User::find($id);
-        $user->image = $this->getNameOfFileUpload($user, $file);
+        $oldImage = $user->image;
         $user->username = Input::get('username');
         $user->email = Input::get('email');
         $user->status = Input::get('status');
+        $user->image = $this->getNameOfFileUpload($user, $file);
 
         if ( $role ) {
             $user->roles_id = Input::get('role');;
@@ -94,10 +97,12 @@ class UserController extends Controller
             $user->password = Hash::make(Input::get('password'));
         }
 
-        $user->save();
+        $newImage = $user->username . '.jpg';
 
         $this->handleFileUpload($file, $user->image);
+        $this->updateImageByName($oldImage, $newImage);
 
+        $user->save();
         return redirect()->action('Admin\UserController@index')->with(['flash_level'=>'success','flash_message' => 'Update User Success']);
     }
 

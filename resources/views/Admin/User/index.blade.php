@@ -42,7 +42,7 @@
 
             <div class="block-fluid table-sorting">
                     <div class="row-fluid">
-                        @if( $isAdmin == 1 )
+                        @if( isset($isAdmin) && $isAdmin == 1 )
                             <div class="span3">
                                 <a href="{{ url('admin/user/create') }}" class="btn btn-add">Add User</a>
                             </div>

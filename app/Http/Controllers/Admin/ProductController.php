@@ -100,12 +100,18 @@ class ProductController extends Controller
         ]);
 
         $product = Product::find($id);
+        $oldName = $product->name;
 
         $product->name = Input::get('name');
         $product->price = Input::get('price');
         $product->description = Input::get('description');
         $product->categories_id = Input::get('category');
         $product->status = Input::get('status');
+
+        $newName = $product->name;
+        if ($oldName != $newName) {
+            $this->updateImagesOfProduct($oldName, $newName);
+        }
 
         $category = new Category();
         $checkActiveCategoryById = $category->checkActiveCategoryById($product->categories_id);
@@ -144,6 +150,21 @@ class ProductController extends Controller
 
                 $this->handleFileUpload($file, $productImages->name);
             }
+        }
+    }
+
+    public function updateImagesOfProduct($oldName, $newName)
+    {
+        $key = 0;
+        $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
+        while (file_exists($dirOld))
+        { 
+            $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
+            $dirNew = public_path() . '/upload/product/' . $newName . '_' . $key . '.jpg';
+            rename($dirOld, $dirNew);
+
+            $key++;
+            $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
         }
     }
 

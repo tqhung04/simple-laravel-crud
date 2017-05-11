@@ -35,4 +35,9 @@ class ProductImages extends Authenticatable
         $total = DB::table('product_images')->where('products_id', '=', $productId)->count();
         return $total;
     }
+
+    public function updateProductImage ($productId, $newProductName)
+    {
+        $result = DB::table('product_images')->select('name')->where('products_id', '=', $productId)->get();
+    }
 }

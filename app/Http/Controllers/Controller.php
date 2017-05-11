@@ -181,7 +181,11 @@ class Controller extends BaseController
                 $fileName = $model->name . '.' . $file->getClientOriginalExtension();
             }
         } else if ( !$file && $model->image != 'default.jpg' ) {
-            $fileName = $model->image;
+            if ($model->username) {
+                $fileName = $model->username . '.jpg';
+            } else {
+                $fileName = $model->name . '.jpg';
+            }
         } else {
             $fileName = 'default.jpg';
         }
@@ -239,6 +243,20 @@ class Controller extends BaseController
             return $data;
         } else {
             return false;
+        }
+    }
+
+    public function updateImageByName($oldImage, $newImage)
+    {
+        $dirOld = public_path() . '/upload/user/' . $oldImage;
+        $dirNew = public_path() . '/upload/user/' . $newImage;
+        $check = file_exists($dirOld);
+        if ( $check ) {
+            if ( $oldImage == 'default.jpg' ) {
+                copy($dirOld, $dirNew);
+            } else {
+                rename($dirOld, $dirNew);
+            }
         }
     }
 }
