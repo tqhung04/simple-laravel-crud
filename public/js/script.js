@@ -92,11 +92,15 @@ $(function(ready){
 
 });
 
-function preview_image() {
-    var total_file = document.getElementById("upload_file").files.length;
+function preview_image($status) {
+    var total_file = document.getElementById('upload_file').files.length;
     var file_name = document.getElementById('upload_file').files[0].name;
-    for(var i=0;i<total_file;i++) {
-        $('#image_preview').append("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[i])+"'/>");
+    if ( $status == 'multiple' ) {
+        for(var i=0;i<total_file;i++) {
+            $('#image_preview').append("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[i])+"'/>");
+        }
+    } else {
+        $('#image_preview').html("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[0])+"'/>");
     }
 }
 

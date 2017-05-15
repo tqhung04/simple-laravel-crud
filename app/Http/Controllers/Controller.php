@@ -95,6 +95,7 @@ class Controller extends BaseController
 
             $listOfId = array_keys($checkedItems);
             $status = $this->getStatus($request->input('active'));
+            $status_name = $request->input('active') ? $request->input('active') : $request->input('deactive');
 
             $model = 'App\\' . $this->_model;
             foreach ($listOfId as $id) {
@@ -112,9 +113,9 @@ class Controller extends BaseController
                         }
                     }
                 }
+                $data->save();
             }
-            $data->save();
-            return redirect()->back()->with(['flash_level'=>'success','flash_message' => ' Bulk action success!']);
+            return redirect()->back()->with(['flash_level'=>'success','flash_message' => $status_name . ' success!']);
         }
         else {
             return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'No row selected']);
@@ -180,7 +181,8 @@ class Controller extends BaseController
             } else {
                 $fileName = $model->name . '.' . $file->getClientOriginalExtension();
             }
-        } else if ( !$file && $model->image != 'default.jpg' ) {
+        } else if ( !$file && $model->image && $model->image != 'default.jpg' ) {
+            die('vao daya h?');
             if ($model->username) {
                 $fileName = $model->username . '.jpg';
             } else {
@@ -258,5 +260,17 @@ class Controller extends BaseController
                 rename($dirOld, $dirNew);
             }
         }
+    }
+
+    public function show() {
+        return view('errors.404');
+    }
+
+    public function isAdmin() {
+        // Check admin
+        $currentUserid = Auth::id();
+        $user = new User();
+        $isAdmin = $user->isAdmin($currentUserid);
+        return $isAdmin;
     }
 }

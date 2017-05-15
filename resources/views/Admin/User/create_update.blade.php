@@ -69,12 +69,16 @@
                         <div class="row-form">
                             <div class="span3">Upload Avatar:</div>
                             <div class="span9">
-                                @if(isset($data->image))
-                                    <img src="{{ asset("upload/user/$data->image") }}" alt="{{ $data->image }}" width="50px" height="50px">
-                                @else
-                                    <img src="{{ asset("upload/user/default.jpg") }}" alt="default" width="50px" height="50px">
-                                @endif
-                                {{ Form::file('image', null) }}
+                                <div id="file">
+                                    <input type="file" name="image" id="upload_file" onchange="preview_image('one')" multiple="false"/>
+                                </div>
+                                <div id="image_preview">
+                                    @if(isset($data->image))
+                                        <img src="{{ asset("upload/user/$data->image") }}" alt="{{ $data->image }}" width="50px" height="50px">
+                                    @else
+                                        <img src="{{ asset("upload/user/default.jpg") }}" alt="default" width="50px" height="50px">
+                                    @endif
+                                </div>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -109,6 +113,12 @@
                                         <option value="1">Deactive</option>
                                         <option value="0">Active</option>
                                     </select>
+                                @endif
+                                {{-- Error --}}
+                                @if(Session::has('flash_message'))
+                                    <div class="alert alert-{!! @Session::get('flash_level') !!}">
+                                        {!! @Session::get('flash_message') !!}
+                                    </div>
                                 @endif
                             </div>
                             <div class="clear"></div>

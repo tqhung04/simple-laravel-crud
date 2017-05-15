@@ -30,6 +30,15 @@
                         {!! Form::open(['action' => 'Admin\CategoryController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
                     @endif
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        @if( isset($isAdmin) && $isAdmin == 1 )
+                            <div class="row-form">
+                                <div class="span3">Creater: </div>
+                                <div class="span9">
+                                    {{ $creater }}
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        @endif
                         <div class="row-form">
                             <div class="span3">Category name:</div>
                             <div class="span9">

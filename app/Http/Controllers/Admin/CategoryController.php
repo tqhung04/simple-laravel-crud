@@ -25,9 +25,11 @@ class CategoryController extends Controller
 
         if ( $category ) {
             $checkCreater = $category->checkCreater($id);
-            if ( $checkCreater ) {
+            if ( $checkCreater || $this->isAdmin() ) {
                 return view('Admin.Category.create_update')
-                        ->with('data', $category);
+                        ->with('data', $category)
+                        ->with('isAdmin', $this->isAdmin())
+                        ->with('creater', $category->getCreaterUsername($id));
             } else {
                 return view('errors.permission');
             }

@@ -38,6 +38,13 @@ class ProductImages extends Authenticatable
 
     public function updateProductImage ($productId, $newProductName)
     {
-        $result = DB::table('product_images')->select('name')->where('products_id', '=', $productId)->get();
+        $result = DB::table('product_images')->select('id')->where('products_id', '=', $productId)->get();
+        $key = 0;
+        foreach ($result as $key => $value) {
+            $image = DB::table('product_images')->where('id', '=', $value->id);
+            $newImageName = $newProductName . '_' . $key. '.jpg';
+            $key += 1;
+            $image->update(['name' => $newImageName]);;
+        }
     }
 }

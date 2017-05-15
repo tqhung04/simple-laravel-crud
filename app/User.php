@@ -41,6 +41,14 @@ class User extends Authenticatable
         }
     }
 
+    public function isSuperAdmin ($userId) {
+        if ( $userId == 1 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getData() {
         $currentUserRoleId = Auth::user()->roles_id;
         $currentUserId = Auth::user()->id;

@@ -67,7 +67,7 @@ class ProductController extends Controller
             $images = $this->getImagesOfProduct($id);
 
             $checkCreater = $product->checkCreater($id);
-            if ( $checkCreater ) {
+            if ( $checkCreater || $this->isAdmin() ) {
                 $categories = Category::get()->where('status', '=', '0');
                 $current_category[$product->categories_id] = Category::get()->where('id', '=', $product->categories_id);
                 $categoryList = [];
@@ -81,7 +81,9 @@ class ProductController extends Controller
                     ->with('images', $images)
                     ->with('active_categories', $categoryList)
                     ->with('current_category', $current_category[$product->categories_id])
-                    ->with('product', $product);
+                    ->with('product', $product)
+                    ->with('isAdmin', $this->isAdmin())
+                    ->with('creater', $product->getCreaterUsername($id));
             } else {
                 return view('errors.permission');
             }
@@ -110,7 +112,7 @@ class ProductController extends Controller
 
         $newName = $product->name;
         if ($oldName != $newName) {
-            $this->updateImagesOfProduct($oldName, $newName);
+            $this->updateImagesOfProduct($id, $oldName, $newName);
         }
 
         $category = new Category();
@@ -153,18 +155,22 @@ class ProductController extends Controller
         }
     }
 
-    public function updateImagesOfProduct($oldName, $newName)
+    public function updateImagesOfProduct($productId, $oldName, $newName)
     {
-        $key = 0;
-        $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
-        while (file_exists($dirOld))
-        { 
+        if ( $oldName !== $newName ) {
+            $key = 0;
             $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
-            $dirNew = public_path() . '/upload/product/' . $newName . '_' . $key . '.jpg';
-            rename($dirOld, $dirNew);
+            $productImages = new ProductImages();
+            while (file_exists($dirOld))
+            { 
+                $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
+                $dirNew = public_path() . '/upload/product/' . $newName . '_' . $key . '.jpg';
+                $productImages->updateProductImage($productId, $newName);
+                rename($dirOld, $dirNew);
 
-            $key++;
-            $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
+                $key++;
+                $dirOld = public_path() . '/upload/product/' . $oldName . '_' . $key . '.jpg';
+            }
         }
     }
 
