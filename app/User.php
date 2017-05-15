@@ -41,6 +41,14 @@ class User extends Authenticatable
         }
     }
 
+    public function isSuperAdmin ($userId) {
+        if ( $userId == 1 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getData() {
         $currentUserRoleId = Auth::user()->roles_id;
         $currentUserId = Auth::user()->id;
@@ -51,5 +59,17 @@ class User extends Authenticatable
             $users = DB::table('users')->where('id', '=', $currentUserId);
         }
         return $users;
+    }
+
+    public function isActive() {
+        $status = Auth::user()->status;
+        die('asdasd');
+        die(var_dump($status));
+
+        if ( $status == 0 ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

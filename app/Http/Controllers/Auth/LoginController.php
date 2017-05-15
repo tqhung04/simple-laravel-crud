@@ -63,6 +63,7 @@ class LoginController extends Controller
                 'status' => 0
             ], $remember
         );
+
         if ( $dataOfInput ) {
             return redirect()->intended($this->redirectTo());
         } else {

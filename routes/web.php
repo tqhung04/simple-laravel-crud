@@ -15,7 +15,7 @@
 Auth::routes();
 
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'status']], function () {
 
     // Default router
     Route::get('/', 'Admin\ProductController@index');

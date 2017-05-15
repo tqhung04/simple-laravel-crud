@@ -46,9 +46,9 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|unique:users',
-            'password' => 'required|min:8',
-            'email' => 'required|email|unique:users',
+            'username' => 'required|max:100||unique:users',
+            'password' => 'required|max:100|min:8',
+            'email' => 'required|max:100|email|unique:users',
             'role' => 'required',
         ]);
 
@@ -71,8 +71,8 @@ class UserController extends Controller
     public function update(Request $request, $id) {
 
         $this->validate($request, [
-            'username' => 'required|unique:users,username,'. $id,
-            'email' => 'required|email|unique:users,email,' . $id,
+            'username' => 'required|max:100|unique:users,username,'. $id,
+            'email' => 'required|max:100|email|unique:users,email,' . $id,
         ]);
 
         $file = Input::file('image');
@@ -84,6 +84,10 @@ class UserController extends Controller
         $user->username = Input::get('username');
         $user->email = Input::get('email');
         $user->status = Input::get('status');
+        if ( $user->isSuperAdmin($id) && $user->status == 1) {
+            $user->status = 0;
+            return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'Can not deactive superadmin']);
+        }
         $user->image = $this->getNameOfFileUpload($user, $file);
 
         if ( $role ) {
@@ -108,24 +112,24 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        // Check admin
-        $currentUserid = Auth::id();
-        $user = new User();
-        $isAdmin = $user->isAdmin($currentUserid);
-
-        // Get Role
-        $user = User::find($id);
-        $roles_model = new Role();
-        $current_role[$user->roles_id] = $roles_model->getNameById($user->roles_id);
-        $roles = $roles_model->getData();
-        $roleList = [];
-        foreach ($roles as $role) {
-            $roleList[$role->id] = $role->name;
-        }
-
         $data = $this->getObjectById($id);
 
         if ( $data ) {
+            // Check admin
+            $currentUserid = Auth::id();
+            $user = new User();
+            $isAdmin = $user->isAdmin($currentUserid);
+
+            // Get Role
+            $user = User::find($id);
+            $roles_model = new Role();
+            $current_role[$user->roles_id] = $roles_model->getNameById($user->roles_id);
+            $roles = $roles_model->getData();
+            $roleList = [];
+            foreach ($roles as $role) {
+                $roleList[$role->id] = $role->name;
+            }
+
             if ( $id == $currentUserid || $isAdmin == true ) {
                 return view('Admin.'. $this->_model .'.create_update')
                     ->with('data', $data)

@@ -39,7 +39,6 @@ class Product extends Authenticatable
             $product = DB::table('products')->where('users_id', '=', $currentUserId);
         }
         return $product;
-        die(var_dump($product));
     }
 
     public function checkCreater($productId) {
@@ -53,5 +52,14 @@ class Product extends Authenticatable
         } else {
             return true;
         }
+    }
+
+    public function getCreaterUsername($productId) {
+        $username = DB::table('products')
+            ->join('users', 'products.users_id', '=', 'users.id')
+            ->where('products.id', '=', $productId)
+            ->select('users.username')
+            ->get();
+        return $username[0]->username;
     }
 }

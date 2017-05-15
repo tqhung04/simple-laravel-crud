@@ -91,4 +91,13 @@ class Category extends Authenticatable
             return true;
         }
     }
+
+    public function getCreaterUsername($categoryId) {
+        $username = DB::table('categories')
+            ->join('users', 'categories.users_id', '=', 'users.id')
+            ->where('categories.id', '=', $categoryId)
+            ->select('users.username')
+            ->get();
+        return $username[0]->username;
+    }
 }

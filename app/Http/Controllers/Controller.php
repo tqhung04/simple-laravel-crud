@@ -46,7 +46,7 @@ class Controller extends BaseController
                 break;
         }
 
-        if ( isset($_GET['page']) && $_GET['page'] > $datas->total()/$this->_pagination + 1)
+        if ( isset($_GET['page']) && $_GET['page'] >= $datas->total()/$this->_pagination + 1 || isset($_GET['page']) && $_GET['page'] < 0 )
         {
             return view('errors.404');
         }
@@ -95,8 +95,10 @@ class Controller extends BaseController
 
             $listOfId = array_keys($checkedItems);
             $status = $this->getStatus($request->input('active'));
+            $status_name = $request->input('active') ? $request->input('active') : $request->input('deactive');
 
             $model = 'App\\' . $this->_model;
+            $check = 0;
             foreach ($listOfId as $id) {
                 $data = $model::find($id);
                 $data->status = $status;
@@ -107,14 +109,31 @@ class Controller extends BaseController
                         $category = new Category();
                         $haveProducts = $category->haveProducts($id);
                         if ( $haveProducts ) {
+                            $check += 1;
                             $data->status = 0;
                             return redirect()->back()->with(['flash_level'=>'error','flash_message' => $data->name . ' had product']);
                         }
                     }
                 }
+
+                if ( $this->_model == 'User' ) {
+                    // Can not deactive superadmin
+                    if ( $data->isSuperAdmin($id) && $data->status == 1) {
+                        $data->status = 0;
+                        return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'Can not deactive superadmin']);
+                    }
+                }
             }
-            $data->save();
-            return redirect()->back()->with(['flash_level'=>'success','flash_message' => ' Bulk action success!']);
+
+            if ( $check == 0 ) {
+                foreach ($listOfId as $id) {
+                    $data = $model::find($id);
+                    $data->status = $status;
+                    $data->save();
+                }
+            }
+
+            return redirect()->back()->with(['flash_level'=>'success','flash_message' => $status_name . ' success!']);
         }
         else {
             return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'No row selected']);
@@ -180,7 +199,7 @@ class Controller extends BaseController
             } else {
                 $fileName = $model->name . '.' . $file->getClientOriginalExtension();
             }
-        } else if ( !$file && $model->image != 'default.jpg' ) {
+        } else if ( !$file && $model->image && $model->image != 'default.jpg' ) {
             if ($model->username) {
                 $fileName = $model->username . '.jpg';
             } else {
@@ -258,5 +277,17 @@ class Controller extends BaseController
                 rename($dirOld, $dirNew);
             }
         }
+    }
+
+    public function show() {
+        return view('errors.404');
+    }
+
+    public function isAdmin() {
+        // Check admin
+        $currentUserid = Auth::id();
+        $user = new User();
+        $isAdmin = $user->isAdmin($currentUserid);
+        return $isAdmin;
     }
 }

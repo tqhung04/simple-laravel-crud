@@ -90,13 +90,44 @@ $(function(ready){
     $order = getUrlParameter('order');
     setImageOrder($sortBy, $order);
 
+    // Keep selected status
+    if (localStorage.getItem('form_status')) {
+        $("#status option").eq(localStorage.getItem('form_status')).prop('selected', true);
+    }
+
+    $("#status").on('change', function() {
+        localStorage.setItem('form_status', $('option:selected', this).index());
+    });
+
+    // Keep selected role
+    if (localStorage.getItem('form_role')) {
+        $("#role option").eq(localStorage.getItem('form_role')).prop('selected', true);
+    }
+
+    $("#role").on('change', function() {
+        localStorage.setItem('form_role', $('option:selected', this).index());
+    });
+
+    // Keep selected category
+    if (localStorage.getItem('form_category')) {
+        $("#category option").eq(localStorage.getItem('form_category')).prop('selected', true);
+    }
+
+    $("#category").on('change', function() {
+        localStorage.setItem('form_category', $('option:selected', this).index());
+    });
+
 });
 
-function preview_image() {
-    var total_file = document.getElementById("upload_file").files.length;
+function preview_image($status) {
+    var total_file = document.getElementById('upload_file').files.length;
     var file_name = document.getElementById('upload_file').files[0].name;
-    for(var i=0;i<total_file;i++) {
-        $('#image_preview').append("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[i])+"'/>");
+    if ( $status == 'multiple' ) {
+        for(var i=0;i<total_file;i++) {
+            $('#image_preview').append("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[i])+"'/>");
+        }
+    } else {
+        $('#image_preview').html("<img width='50px' height='50px' src='"+URL.createObjectURL(event.target.files[0])+"'/>");
     }
 }
 

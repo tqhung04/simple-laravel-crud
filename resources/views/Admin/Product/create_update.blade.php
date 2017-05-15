@@ -29,6 +29,15 @@
                 {!! Form::open(['action' => 'Admin\ProductController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'files'=>true]) !!}
             @endif
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @if( isset($isAdmin) && $isAdmin == 1 )
+                    <div class="row-form">
+                        <div class="span3">Creater: </div>
+                        <div class="span9">
+                            {{ $creater }}
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                @endif
                 <div class="row-form">
                     <div class="span3">Product Name:</div>
                     <div class="span9">
@@ -73,11 +82,11 @@
                                 <option value="{{ $key }}">{{ $category }}</option>
                             @endforeach
                         </select>
-                        @if(Session::has('flash_message'))
-                            <div class="alert alert-{!! @Session::get('flash_level') !!}">
-                                {!! @Session::get('flash_message') !!}
-                            </div>
-                        @endif
+                            @if(Session::has('flash_message'))
+                                <div class="alert alert-{!! @Session::get('flash_level') !!}">
+                                    {!! @Session::get('flash_message') !!}
+                                </div>
+                            @endif
                         @if( $errors->first('category') )
                             <div class = "alert alert-danger">
                                 {!! $errors->first('category') !!}
@@ -90,7 +99,7 @@
                     <div class="span3">Upload Image:</div>
                     <div class="span9">
                         <div id="files">
-                            <input type="file" name="images[]" id="upload_file" onchange="preview_image()" multiple="true"/>
+                            <input type="file" name="images[]" id="upload_file" onchange="preview_image('multiple')" multiple="true"/>
                         </div>
                         <div id="image_preview">
                             @if(isset($images))
