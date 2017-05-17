@@ -133,6 +133,9 @@ class Controller extends BaseController
                 }
             }
 
+                $data->save();
+            }
+
             return redirect()->back()->with(['flash_level'=>'success','flash_message' => $status_name . ' success!']);
         }
         else {
