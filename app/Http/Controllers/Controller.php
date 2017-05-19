@@ -99,7 +99,8 @@ class Controller extends BaseController
 
             $model = 'App\\' . $this->_model;
             $check = 0;
-            foreach ($listOfId as $id) {
+            foreach ($listOfId as $id)
+            {
                 $data = $model::find($id);
                 $data->status = $status;
 
@@ -125,20 +126,18 @@ class Controller extends BaseController
                 }
             }
 
-            if ( $check == 0 ) {
-                foreach ($listOfId as $id) {
+            if ( $check == 0 )
+            {
+                foreach ($listOfId as $id)
+                {
                     $data = $model::find($id);
                     $data->status = $status;
                     $data->save();
                 }
             }
 
-                $data->save();
-            }
-
             return redirect()->back()->with(['flash_level'=>'success','flash_message' => $status_name . ' success!']);
-        }
-        else {
+        } else {
             return redirect()->back()->with(['flash_level'=>'error','flash_message' => 'No row selected']);
         }
     }

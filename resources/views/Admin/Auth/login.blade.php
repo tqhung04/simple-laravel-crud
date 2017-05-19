@@ -37,9 +37,9 @@
                 <button type="submit" class="btn btn-block" name="btnLogin">Sign in</button>
             </div> 
         </form>
-        @if (session('message'))
-            <div class="alert alert-error" style="text-align: center">
-                {{ session('message') }}
+        @if(Session::has('flash_message'))
+             <div class="message alert alert-{!! @Session::get('flash_level') !!}">
+                {!! @Session::get('flash_message') !!}
             </div>
         @endif
     </div>

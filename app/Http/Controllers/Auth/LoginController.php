@@ -67,7 +67,7 @@ class LoginController extends Controller
         if ( $dataOfInput ) {
             return redirect()->intended($this->redirectTo());
         } else {
-            return redirect()->route($this->redirectAfterLoginFailed())->with('message', 'User & password doesn\'t match.');
+            return redirect()->route($this->redirectAfterLoginFailed())->with(['flash_level'=> 'error','flash_message' => 'User & password doesn\'t match.']);
         }
     }
 

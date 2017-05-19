@@ -63,8 +63,6 @@ class User extends Authenticatable
 
     public function isActive() {
         $status = Auth::user()->status;
-        die('asdasd');
-        die(var_dump($status));
 
         if ( $status == 0 ) {
             return true;

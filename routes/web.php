@@ -1,4 +1,5 @@
 <?php
+use App\Http\Middleware\CheckStatus;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,28 +16,30 @@
 Auth::routes();
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'status']], function () {
-
-    // Default router
-    Route::get('/', 'Admin\ProductController@index');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     // Logout
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
-    // User
-    Route::get('user/search', 'Admin\UserController@search')->name('user.search');
-    Route::post('user/bulkAction', 'Admin\UserController@bulkAction');
-    Route::resource('user', 'Admin\UserController');
+    Route::group(['middleware' => 'status'], function() {
+        // Default router
+        Route::get('/', 'Admin\ProductController@index');
 
-    // Product
-    Route::get('product/search', 'Admin\ProductController@search')->name('product.search');;
-    Route::post('product/bulkAction', 'Admin\ProductController@bulkAction');
-    Route::resource('product', 'Admin\ProductController');
+        // User
+        Route::get('user/search', 'Admin\UserController@search')->name('user.search');
+        Route::post('user/bulkAction', 'Admin\UserController@bulkAction');
+        Route::resource('user', 'Admin\UserController');
 
-    // Category
-    Route::get('category/search', 'Admin\CategoryController@search')->name('category.search');;
-    Route::post('category/bulkAction', 'Admin\CategoryController@bulkAction');
-    Route::resource('category', 'Admin\CategoryController');
+        // Product
+        Route::get('product/search', 'Admin\ProductController@search')->name('product.search');;
+        Route::post('product/bulkAction', 'Admin\ProductController@bulkAction');
+        Route::resource('product', 'Admin\ProductController');
+
+        // Category
+        Route::get('category/search', 'Admin\CategoryController@search')->name('category.search');;
+        Route::post('category/bulkAction', 'Admin\CategoryController@bulkAction');
+        Route::resource('category', 'Admin\CategoryController');
+    });
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'login'], function() {
