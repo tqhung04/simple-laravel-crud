@@ -98,7 +98,6 @@ class ProductController extends Controller
             'name' => 'required|max:100|regex:/^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/|unique:products,name,' . $id,
             'price' => 'required|numeric|max:999999999|min:0',
             'category' => 'required',
-            'images[]' => 'mimes:jpg,jpeg,png,gif|max:2048'
         ]);
 
         $product = Product::find($id);
@@ -134,6 +133,9 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             $files = $request->file('images');
             foreach($files as $key => $file){
+                $this->validate($request, [
+                    'images' => 'image',
+                ]);
                 $product = new Product();
                 $highestIdOfProduct = $product->getTheHighestId();
 

@@ -71,6 +71,11 @@
                             <div class="span9">
                                 <div id="file">
                                     <input type="file" name="image" id="upload_file" onchange="preview_image('one')" multiple="false"/>
+                                    @if( $errors->first('image') )
+                                        <div class = "alert alert-danger">
+                                            {!! $errors->first('image') !!}
+                                        </div>
+                                    @endif
                                 </div>
                                 <div id="image_preview">
                                     @if(isset($data->image))

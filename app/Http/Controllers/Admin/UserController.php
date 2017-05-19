@@ -46,9 +46,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|max:100||unique:users',
+            'username' => 'required|max:100|regex:/^[A-Za,-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/|unique:users',
             'password' => 'required|max:100|min:8',
             'email' => 'required|max:100|email|unique:users',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
             'role' => 'required',
         ]);
 
@@ -73,6 +74,7 @@ class UserController extends Controller
         $this->validate($request, [
             'username' => 'required|max:100|unique:users,username,'. $id,
             'email' => 'required|max:100|email|unique:users,email,' . $id,
+            'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $file = Input::file('image');
