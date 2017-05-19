@@ -633,3 +633,6 @@ input[type="radio"] {
 .search_form .span4:last-child {
     border-right: none
 }
+.search_form select {
+    margin-bottom: 0;
+}
