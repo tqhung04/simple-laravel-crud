@@ -140,7 +140,7 @@ function setSelectedStatus() {
 }
 
 function hideStatusForm() {
-    $('#form_status').parent().css( "opacity", "0.7" );
+    $('#form_status').parent().css( "opacity", "0.5" );
     $('#form_status select').attr("disabled", true);
     $('#search_status').removeAttr("checked");
 }
@@ -152,7 +152,7 @@ function showStatusForm() {
 }
 
 function hidePriceForm() {
-    $('#form_price').parent().css( "opacity", "0.7" );
+    $('#form_price').parent().css( "opacity", "0.5" );
     $('#form_price select').attr("disabled", true);
     $('#search_price').removeAttr("checked");
 }
@@ -164,7 +164,8 @@ function showPriceForm() {
 }
 
 function hideNameForm() {
-    $('#form_name').parent().css( "opacity", "0.7" );
+    $('#form_name').parent().css( "opacity", "0.5" );
+    $('#form_name').parent().css( "opacity", "0.5" );
     $('#form_name input').attr("disabled", true);
     $('#search_name').removeAttr("checked");
 }

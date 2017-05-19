@@ -21,21 +21,21 @@
                 </div>
             </div>
             <div class="span4">
+                <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
+                <div id="form_status">
+                    <select name='status' id="status_select" onchange="setSelectedStatus()">
+                        <option value='active'>Active</option>
+                        <option value='deactive'>Deactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="span4">
                 <input type="radio" id="search_price" name="search_type" value="price" onclick="generatePrice()"> Price
                 <div id="form_price">
                     <select name='price' id="price_select" onchange="setSelectedPrice()">
                         <option value='<100000'>< 100000 VNĐ</option>
                         <option value='10000~500000'>10000~500000 VNĐ</option>
                         <option value='>500000'> > 500000 VNĐ</option>
-                    </select>
-                </div>
-            </div>
-            <div class="span4">
-                <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
-                <div id="form_status">
-                    <select name='status' id="status_select" onchange="setSelectedStatus()">
-                        <option value='active'>Active</option>
-                        <option value='deactive'>Deactive</option>
                     </select>
                 </div>
             </div>
