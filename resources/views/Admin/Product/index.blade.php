@@ -9,29 +9,35 @@
 @section('search')
     {{ Form::open(array('url' => 'admin/product/search', 'method' => 'get')) }}
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-        <input type="radio" id="search_name" name="search_type" value="name" checked="checked" onclick="generateName()"> Name
-        <input type="radio" id="search_price" name="search_type" value="price" onclick="generatePrice()"> Price
-        <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
-        <div id="form_generate">
-            <div id="form_name">
-                @if( isset($_GET['name']) )
-                    {!! Form::text('name', $_GET['name'], array('required', 'class'=>'span11', 'placeholder'=>'Search by name of product...')) !!}
-                @else
-                    {!! Form::text('name', null, array('required', 'class'=>'span11', 'placeholder'=>'Search by name of product...')) !!}
-                @endif
+        <div class="row-fluid search_form">
+            <div class="span4">
+                <input type="radio" id="search_name" name="search_type" value="name" checked="checked" onclick="generateName()"> Name<br>
+                 <div id="form_name">
+                    @if( isset($_GET['name']) )
+                        {!! Form::text('name', $_GET['name'], array('required', 'class'=>'span11', 'placeholder'=>'Search by name of product...')) !!}
+                    @else
+                        {!! Form::text('name', null, array('required', 'class'=>'span11', 'placeholder'=>'Search by name of product...')) !!}
+                    @endif
+                </div>
             </div>
-            <div id="form_price">
-                <select name='price' id="price_select" onchange="setSelectedPrice()">
-                    <option value='<100000'>< 100000 VNĐ</option>
-                    <option value='10000~500000'>10000~500000 VNĐ</option>
-                    <option value='>500000'> > 500000 VNĐ</option>
-                </select>
+            <div class="span4">
+                <input type="radio" id="search_price" name="search_type" value="price" onclick="generatePrice()"> Price
+                <div id="form_price">
+                    <select name='price' id="price_select" onchange="setSelectedPrice()">
+                        <option value='<100000'>< 100000 VNĐ</option>
+                        <option value='10000~500000'>10000~500000 VNĐ</option>
+                        <option value='>500000'> > 500000 VNĐ</option>
+                    </select>
+                </div>
             </div>
-            <div id="form_status">
-                <select name='status' id="status_select" onchange="setSelectedStatus()">
-                    <option value='active'>Active</option>
-                    <option value='deactive'>Deactive</option>
-                </select>
+            <div class="span4">
+                <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
+                <div id="form_status">
+                    <select name='status' id="status_select" onchange="setSelectedStatus()">
+                        <option value='active'>Active</option>
+                        <option value='deactive'>Deactive</option>
+                    </select>
+                </div>
             </div>
         </div>
         {!! Form::submit('Search', array('class'=>'btn btn-default')) !!}

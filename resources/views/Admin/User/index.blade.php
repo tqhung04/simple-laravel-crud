@@ -9,21 +9,25 @@
 @section('search')
     {{ Form::open(array('url' => 'admin/user/search', 'method' => 'get')) }}
         <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-        <input type="radio" id="search_name" name="search_type" value="username" checked="checked" onclick="generateName()"> Name
-        <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
-        <div id="form_generate">
-            <div id="form_name">
-                @if( isset($_GET['name']) )
-                    {!! Form::text('name', $_GET['name'], array('required', 'class'=>'span11', 'placeholder'=>'Search by name of user...')) !!}
-                @else
-                    {!! Form::text('name', null, array('required', 'class'=>'span11', 'placeholder'=>'Search by name of user...')) !!}
-                @endif
+        <div class="row-fluid search_form">
+            <div class="span4">
+                <input type="radio" id="search_name" name="search_type" value="username" checked="checked" onclick="generateName()"> Name
+                <div id="form_name">
+                    @if( isset($_GET['name']) )
+                        {!! Form::text('name', $_GET['name'], array('required', 'class'=>'span11', 'placeholder'=>'Search by name of user...')) !!}
+                    @else
+                        {!! Form::text('name', null, array('required', 'class'=>'span11', 'placeholder'=>'Search by name of user...')) !!}
+                    @endif
+                </div>
             </div>
-            <div id="form_status">
-                <select name='status' id="status_select" onchange="setSelectedStatus()">
-                    <option value='active'>Active</option>
-                    <option value='deactive'>Deactive</option>
-                </select>
+            <div class="span4">
+                <div id="form_status">
+                    <input type="radio" id="search_status" name="search_type" value="status" onclick="generateStatus()"> Status<br>
+                    <select name='status' id="status_select" onchange="setSelectedStatus()">
+                        <option value='active'>Active</option>
+                        <option value='deactive'>Deactive</option>
+                    </select>
+                </div>
             </div>
         </div>
         {!! Form::submit('Search', array('class'=>'btn btn-default')) !!}

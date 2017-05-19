@@ -626,3 +626,10 @@ input[type="radio"] {
 .red {
     color: red !important;
 }
+
+.search_form .span4 {
+    border-right: 1px solid black;
+}
+.search_form .span4:last-child {
+    border-right: none
+}
